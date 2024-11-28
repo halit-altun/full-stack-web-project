@@ -1,4 +1,4 @@
-# Amazing E-commerce Platform
+# Amazing.com E-commerce Platform
 
 A full-stack e-commerce platform built with React, Node.js, Express, and MongoDB. Features include user authentication, product management, shopping cart functionality, order processing, and address management.
 
@@ -16,6 +16,7 @@ Screenshot
 ![Ekran görüntüsü 2024-11-28 183058](https://github.com/user-attachments/assets/7474d3cc-031b-4395-8f61-b29aa347e863)
 ![Ekran görüntüsü 2024-11-28 183121](https://github.com/user-attachments/assets/a022ff32-af02-43f3-8075-a06e8d3e5f81)
 ![Ekran görüntüsü 2024-11-28 183221](https://github.com/user-attachments/assets/5b4a84a4-3610-4962-b23e-0d0ab61b810d)
+![Ekran görüntüsü 2024-11-28 184451](https://github.com/user-attachments/assets/8c89691a-4dc4-4eee-918d-22647cffb17d)
 
 
 
