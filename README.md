@@ -2,6 +2,23 @@
 
 A full-stack e-commerce platform built with React, Node.js, Express, and MongoDB. Features include user authentication, product management, shopping cart functionality, order processing, and address management.
 
+Screenshot
+![Ekran görüntüsü 2024-11-28 182358](https://github.com/user-attachments/assets/9d114ebe-ff23-467e-a180-4f8acf165465)
+![Ekran görüntüsü 2024-11-28 182415](https://github.com/user-attachments/assets/275f615d-24f2-4871-ad2b-a126b11e2664)
+![Ekran görüntüsü 2024-11-28 182633](https://github.com/user-attachments/assets/f573b66c-f65d-4081-90e8-e22702cf9a93)
+![Ekran görüntüsü 2024-11-28 182708](https://github.com/user-attachments/assets/47e59ce8-afc5-4829-a808-fdd6459b7ccc)
+![Ekran görüntüsü 2024-11-28 182739](https://github.com/user-attachments/assets/8e9af59c-2729-486a-a0c4-44651c4d9c85)
+![Ekran görüntüsü 2024-11-28 182818](https://github.com/user-attachments/assets/f3ead0a1-04ea-4931-8a79-7278d2a88768)
+![Ekran görüntüsü 2024-11-28 183011](https://github.com/user-attachments/assets/e27ff94a-19c6-4af1-a50a-96eb422bf82d)
+![Ekran görüntüsü 2024-11-28 183022](https://github.com/user-attachments/assets/7e362c64-b6a7-4b60-a90a-6fdadfdcd482)
+![Ekran görüntüsü 2024-11-28 183106](https://github.com/user-attachments/assets/221ec7d0-11d7-42c4-ad63-f790381e9287)
+![Ekran görüntüsü 2024-11-28 183113](https://github.com/user-attachments/assets/ab3a70df-1373-4848-bafd-b7a4f20e5d8a)
+![Ekran görüntüsü 2024-11-28 183058](https://github.com/user-attachments/assets/7474d3cc-031b-4395-8f61-b29aa347e863)
+![Ekran görüntüsü 2024-11-28 183121](https://github.com/user-attachments/assets/a022ff32-af02-43f3-8075-a06e8d3e5f81)
+![Ekran görüntüsü 2024-11-28 183221](https://github.com/user-attachments/assets/5b4a84a4-3610-4962-b23e-0d0ab61b810d)
+
+
+
 ## Features
 
 - 🔐 User Authentication & Authorization
