@@ -133,6 +133,11 @@ The application will be available at `http://localhost:5173`
 - Protected Routes
 - Input Validation
 
+## Contact
+
+Halit ALTUN - [@halit-altun](https://github.com/halit-altun)
+
+Project Link: [https://github.com/halit-altun/fullstack-web-project)
   
 ## Support
 
