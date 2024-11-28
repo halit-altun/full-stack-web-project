@@ -128,7 +128,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Your Name - [@halit-altun](https://github.com/halit-altun)
+Halit ALTUN - [@halit-altun](https://github.com/halit-altun)
 
 Project Link: [https://github.com/halit-altun/fullstack-web-project)
 
