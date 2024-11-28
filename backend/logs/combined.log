@@ -3145,3 +3145,53 @@
 {"level":"info","message":"Server 5000 portunda çalışıyor","service":"e-commerce-api","timestamp":"2024-11-28 16:38:33"}
 {"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 16:40:50","userId":"67475d7a092828c10496a8c5"}
 {"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 16:40:51","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Server 5000 portunda çalışıyor","service":"e-commerce-api","timestamp":"2024-11-28 18:21:10"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:23:10","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:23:10","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:23:10","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:23:10","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:24:20","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:24:20","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:24:20","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:24:20","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:24:23","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:24:23","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:24:23","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:24:23","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/674860af70d994b9e8e5b714","service":"e-commerce-api","timestamp":"2024-11-28 18:25:51","userId":"67475d7a092828c10496a8c5"}
+{"addressId":"674860af70d994b9e8e5b714","level":"info","message":"Address deleted successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:25:52","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:26:21","userId":"67475d7a092828c10496a8c5"}
+{"addressId":"67488b9d1fb5712365d62f40","level":"info","message":"Address created successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:26:21","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:26:22","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:26:23","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:26:23","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:26:23","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:26:49","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Order created successfully","orderId":"67488bb91fb5712365d62f47","service":"e-commerce-api","timestamp":"2024-11-28 18:26:49","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 18:26:49","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 18:26:50","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:26:56","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:26:56","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:26:57","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:26:57","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:27:02","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Order created successfully","orderId":"67488bc61fb5712365d62f85","service":"e-commerce-api","timestamp":"2024-11-28 18:27:03","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 18:27:03","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 18:27:04","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 18:27:27","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-28 18:27:27","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:27:31","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:27:31","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:27:31","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:27:31","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/profile","service":"e-commerce-api","timestamp":"2024-11-28 18:28:05","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:29:21","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:29:21","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:29:22","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:29:22","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:29:31","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:29:31","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-28 18:29:31","userId":"67475d7a092828c10496a8c5"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:29:31","userId":"67475d7a092828c10496a8c5"}
+{"level":"info","message":"Password reset email sent to halitkhalil@gmail.com","messageId":"<f33329e9-9b17-9bfb-9031-244a443cc704@gmail.com>","service":"e-commerce-api","timestamp":"2024-11-28 18:31:42"}
+{"email":"halitkhalil@gmail.com","level":"info","message":"Password reset email sent successfully","service":"e-commerce-api","timestamp":"2024-11-28 18:31:42"}

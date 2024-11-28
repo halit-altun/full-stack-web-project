@@ -1,45 +1,150 @@
-backend/ - Ana backend klasörü
-1. controllers/ - İş mantığının yürütüldüğü kontrolcü dosyaları
+# E-Commerce Backend API
 
-authController.js: Kimlik doğrulama işlemleri (giriş, kayıt, şifre sıfırlama)
-productController.js: Ürün işlemleri (ekleme, listeleme, güncelleme, silme)
-orderController.js: Sipariş işlemleri yönetimi
-userController.js: Kullanıcı profil yönetimi
-categoryController.js: Ürün kategorileri yönetimi
+A robust RESTful API built with Node.js, Express, and MongoDB to power an e-commerce platform.
 
-2. models/ - Veritabanı şema ve modellerinin tanımlandığı dosyalar
+## Features
 
-User.js: Kullanıcı veri modeli
-Product.js: Ürün veri modeli
-Order.js: Sipariş veri modeli
-Category.js: Kategori veri modeli
-Review.js: Ürün değerlendirme veri modeli
-Address.js: Adres veri modeli
+- User authentication and authorization with JWT
+- Product management
+- Shopping cart functionality
+- Order processing
+- Address management
+- Password reset with email notifications
+- CSRF protection
+- Comprehensive error handling and logging
 
-3. routes/ - API endpoint'lerinin tanımlandığı rota dosyaları
+## Prerequisites
 
-authRoutes.js: Kimlik doğrulama rotaları
-productRoutes.js: Ürün rotaları
-orderRoutes.js: Sipariş rotaları
-userRoutes.js: Kullanıcı rotaları
-categoryRoutes.js: Kategori rotaları
+Before you begin, ensure you have the following installed:
+- Node.js (v14 or higher)
+- MongoDB
+- npm or yarn
 
-4. middlewares/ - Ara yazılım fonksiyonları
+## Environment Variables
 
-authMiddleware.js: Kimlik doğrulama kontrolleri
-errorMiddleware.js: Hata yakalama ve işleme
-validationMiddleware.js: Veri doğrulama kontrolleri
-adminMiddleware.js: Yönetici yetki kontrolleri
+Create a `.env` file in the root directory with the following variables:
+env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+EMAIL_USER=your_email_address
+EMAIL_PASSWORD=your_email_app_password
+NODE_ENV=development
 
-5. config/ - Yapılandırma dosyaları
+## Installation
 
-db.js: Veritabanı bağlantı ayarları
-environment.js: Ortam değişkenleri yapılandırması
-multerConfig.js: Dosya yükleme yapılandırması
+1. Clone the repository:
+bash
+git clone <repository-url>
+cd backend
 
-6. utils/ - Yardımcı fonksiyonlar
+2. Install dependencies:
+bash
+npm install
 
-passwordUtils.js: Şifre işlemleri (hash, kontrol)
-tokenUtils.js: JWT token işlemleri
-emailUtils.js: E-posta gönderme fonksiyonları
-uploadUtils.js: Dosya yükleme yardımcı fonksiyonları
+3. Start the development server:
+bash
+npm start
+
+The server will start on port 5000 (or the port specified in your environment variables).
+
+## API Endpoints
+
+### Authentication
+- `POST /api/users/register` - Register a new user
+- `POST /api/users/login` - User login
+- `POST /api/users/forgot-password` - Request password reset
+- `POST /api/users/reset-password/:token` - Reset password
+- `POST /api/users/change-password` - Change password (authenticated)
+
+### Products
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get product by ID
+- `POST /api/products` - Create new product (admin only)
+- `GET /api/products/categories` - Get all product categories
+
+### Orders
+- `POST /api/orders` - Create new order
+- `GET /api/users/orders` - Get user's orders (authenticated)
+
+### Addresses
+- `GET /api/addresses` - Get user's addresses
+- `POST /api/addresses` - Add new address
+- `PUT /api/addresses/:id` - Update address
+- `DELETE /api/addresses/:id` - Delete address
+
+## Security Features
+
+- JWT authentication
+- Password hashing with bcrypt
+- CSRF protection
+- Rate limiting
+- Secure HTTP headers
+- Input validation and sanitization
+
+## Error Handling
+
+The API implements comprehensive error handling with:
+- Custom error messages
+- Appropriate HTTP status codes
+- Error logging with Winston
+
+## Logging
+
+Logs are stored in the `logs` directory:
+- `error.log` - Error level logs
+- `combined.log` - All logs
+
+## Database Schema
+
+### User
+- First name
+- Last name
+- Email
+- Password (hashed)
+- Phone
+- Addresses
+- Orders
+- Admin status
+
+### Product
+- Title
+- Image
+- Description
+- Price
+- Rating
+- Stock count
+- Category
+
+### Order
+- User reference
+- Products array
+- Delivery address
+- Total amount
+- Status
+- Timestamps
+
+### Address
+- User reference
+- Title
+- Full address
+- City
+- District
+- Postal code
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details
+
+## Contact
+
+Halit ALTUN - halitaltun002@gmail.com
+Project Link: [https://github.com/halit-altun/fullstack-web-project]
