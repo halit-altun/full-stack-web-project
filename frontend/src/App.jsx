@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { OrderProvider } from './contexts/OrderContext';
 import { AddressProvider } from './contexts/AddressContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import AppRoutes from './routes/AppRoutes';
 import './styles/global.css';
 
@@ -21,15 +22,17 @@ function App() {
           <CartProvider>
             <OrderProvider>
               <AddressProvider>
-                <ThemeProvider theme={theme}>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    minHeight: '100vh'
-                  }}>
-                    <AppRoutes />
-                  </Box>
-                </ThemeProvider>
+                <LanguageProvider>
+                  <ThemeProvider theme={theme}>
+                    <Box sx={{ 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      minHeight: '100vh'
+                    }}>
+                      <AppRoutes />
+                    </Box>
+                  </ThemeProvider>
+                </LanguageProvider>
               </AddressProvider>
             </OrderProvider>
           </CartProvider>

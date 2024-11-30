@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -9,6 +9,7 @@ import {
   Box,
   useTheme,
   useMediaQuery,
+  MenuItem,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -26,6 +27,7 @@ import SearchBarComponent from './SearchBar';
 import { StyledComponents, AccountMenu, MenuSection, SignInButton } from './styles/NavbarStyles';
 import MobileMenu from './MobileMenu';
 import CartButton from './CartButton';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -40,6 +42,40 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { language } = useLanguage();
+  const location = useLocation();
+  const translations = {
+    tr: {
+      deliveryAddress: 'Teslimat adresi',
+      turkey: 'Türkiye',
+      searchPlaceholder: "Amazing'de Ara",
+      hello: 'Merhaba',
+      signIn: 'Giriş Yapın',
+      accountAndLists: 'Hesap ve Listeler',
+      myAccount: 'Hesabım',
+      accountDetails: 'Hesap Detayları',
+      myOrders: 'Siparişlerim',
+      logout: 'Çıkış Yap',
+      newCustomer: 'Yeni müşteri misiniz?',
+      createAccount: 'Hesap oluşturun',
+      logoutSuccess: 'Başarıyla çıkış yapıldı'
+    },
+    en: {
+      deliveryAddress: 'Delivery address',
+      turkey: 'Turkey',
+      searchPlaceholder: 'Search Amazing',
+      hello: 'Hello',
+      signIn: 'Sign In',
+      accountAndLists: 'Account & Lists',
+      myAccount: 'My Account',
+      accountDetails: 'Account Details',
+      myOrders: 'My Orders',
+      logout: 'Logout',
+      newCustomer: 'New customer?',
+      createAccount: 'Create account',
+      logoutSuccess: 'Successfully logged out'
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -62,8 +98,8 @@ const Navbar = () => {
     dispatch(logout());
     localStorage.removeItem('user');
     setAccountMenuOpen(false);
-    toast.success('Başarıyla çıkış yapıldı');
-    navigate('/login');
+    toast.success(translations[language].logoutSuccess);
+    navigate('/login', { replace: true });
   };
 
   const handleMobileSearchClick = () => {
@@ -83,6 +119,15 @@ const Navbar = () => {
     }
   };
 
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      window.location.reload();
+    } else {
+      navigate('/');
+    }
+  };
+
   const renderLocationButton = () => (
     <StyledComponents.LocationButton>
       <LocationOn sx={{ mr: 1, fontSize: { xs: 18, sm: 20, md: 24 } }} />
@@ -96,7 +141,7 @@ const Navbar = () => {
             lineHeight: 1
           }}
         >
-          Teslimat adresi
+          {translations[language].deliveryAddress}
         </Typography>
         <Typography 
           variant="subtitle2" 
@@ -106,7 +151,7 @@ const Navbar = () => {
             lineHeight: 1
           }}
         >
-          Türkiye
+          {translations[language].turkey}
         </Typography>
       </Box>
     </StyledComponents.LocationButton>
@@ -145,10 +190,10 @@ const Navbar = () => {
           }}
         >
           <Typography variant="caption" sx={{ fontSize: { xs: '10px', sm: '11px', md: '12px' }, lineHeight: 1.1 }}>
-            {isAuthenticated ? `Merhaba, ${user?.firstName}` : 'Merhaba, Giriş Yapın'}
+            {isAuthenticated ? `${translations[language].hello}, ${user?.firstName}` : `${translations[language].hello}, ${translations[language].signIn}`}
           </Typography>
           <Typography sx={{ fontSize: { xs: '12px', sm: '13px', md: '14px' }, fontWeight: 'bold', lineHeight: 1.1 }}>
-            Hesap ve Listeler
+            {translations[language].accountAndLists}
           </Typography>
         </Box>
 
@@ -160,10 +205,10 @@ const Navbar = () => {
                 to="/login"
                 variant="contained"
               >
-                Giriş Yap
+                {translations[language].signIn}
               </SignInButton>
               <Typography variant="body2" sx={{ mt: 2, color: '#444' }}>
-                Yeni müşteri misiniz?{' '}
+                {translations[language].newCustomer}{' '}
                 <Link 
                   to="/register" 
                   style={{ 
@@ -175,25 +220,29 @@ const Navbar = () => {
                     }
                   }}
                 >
-                  Hesap oluşturun
+                  {translations[language].createAccount}
                 </Link>
               </Typography>
             </Box>
           ) : (
             <MenuSection>
               <Typography className="title">
-                Hesabım
+                {translations[language].myAccount}
               </Typography>
-              <Link to="/account" className="menu-item">Hesap Detayları</Link>
-              <Link to="/account/orders" className="menu-item">Siparişlerim</Link>
-              <Box 
-                className="menu-item" 
-                component="div" 
-                onClick={handleLogout}
-                sx={{ cursor: 'pointer' }}
+              <Link to="/account" className="menu-item">{translations[language].accountDetails}</Link>
+              <Link to="/account/orders" className="menu-item">{translations[language].myOrders}</Link>
+              <Link 
+                onClick={() => {
+                  handleLogout();
+                  setAccountMenuOpen(false);
+                }}
+                className="menu-item"
+                style={{ 
+                  color: '#dc3545'
+                }}
               >
-                Çıkış Yap
-              </Box>
+                {translations[language].logout}
+              </Link>
             </MenuSection>
           )}
         </AccountMenu>
@@ -206,7 +255,7 @@ const Navbar = () => {
       {isSearchOpen ? (
         <StyledComponents.MobileSearchInput>
           <InputBase
-            placeholder="Amazing'de Ara"
+            placeholder={translations[language].searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => {
@@ -234,7 +283,7 @@ const Navbar = () => {
               fontSize: '0.9rem',
             }}
           >
-            Amazing'de Ara
+            {translations[language].searchPlaceholder}
           </Typography>
         </StyledComponents.MobileSearchInput>
       )}
@@ -249,9 +298,9 @@ const Navbar = () => {
             <MenuIcon />
           </StyledComponents.MobileMenuButton>
 
-          <Link to="/">
+          <a href="/" onClick={handleLogoClick}>
             <StyledComponents.LogoImage src="/src/assets/img/logo.png" alt="Amazing Logo" />
-          </Link>
+          </a>
 
           {!isMobile && (
             <Box sx={{ 

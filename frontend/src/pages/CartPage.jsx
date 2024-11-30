@@ -21,6 +21,7 @@ import {
 } from '../styles/CartPageStyles';
 import DeliveryAddress from '../components/Cart/DeliveryAddress';
 import CheckoutSummary from '../components/Cart/CheckoutSummary';
+import { useLanguage, translations } from '../contexts/LanguageContext';
 
 const CartItemSkeleton = () => (
   <Box sx={{ my: 3 }}>
@@ -46,7 +47,7 @@ const CartItemSkeleton = () => (
   </Box>
 );
 
-const CartSummary = () => {
+const CartPage = () => {
   const { cartItems, getCartCount, getCartTotal, updateQuantity, removeFromCart, clearCart } = useCart();
   const { addOrder } = useOrders();
   const { addresses, setAddresses } = useAddresses();
@@ -59,6 +60,8 @@ const CartSummary = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isAuthenticated = user !== null;
   const [cartLoading, setCartLoading] = useState(true);
+  const { language } = useLanguage();
+  const t = translations[language].cart;
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -76,10 +79,7 @@ const CartSummary = () => {
   }, []);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -160,14 +160,14 @@ const CartSummary = () => {
               textAlign: 'center'
             }}
           >
-            Sepetiniz boş
+            {t.emptyCart}
           </Typography>
           <StyledButton
             component={Link}
             to="/"
             variant="contained"
           >
-            Alışverişe Devam Et
+            {t.continueShopping}
           </StyledButton>
         </StyledContainer>
       </PageContainer>
@@ -205,7 +205,7 @@ const CartSummary = () => {
                   fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
                 }}
               >
-                Alışveriş Sepeti
+                {t.pageTitle}
               </Typography>
               <Typography 
                 variant="body2" 
@@ -386,4 +386,4 @@ const CartSummary = () => {
   );
 };
 
-export default CartSummary;
+export default CartPage;

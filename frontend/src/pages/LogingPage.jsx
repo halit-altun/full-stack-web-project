@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -13,13 +13,19 @@ import {
   InputAdornment
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/slices/authSlice';
 import AuthFooter from '../components/Auth/AuthFooter';
 import AnimatedCheckmark from '../components/Common/AnimatedCheckmark';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import authService from '../services/authService';
+import { setUser } from '../redux/slices/authSlice';
+import api from '../services/api';
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -66,7 +72,21 @@ const Login = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
+  const { language } = useLanguage();
+  const t = translations[language].login;
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    // Only redirect if user was already authenticated before visiting login page
+    const initialAuthCheck = () => {
+      if (isAuthenticated) {
+        navigate('/', { replace: true });
+      }
+    };
+    initialAuthCheck();
+  }, []); // Empty dependency array for initial check only
 
   const [formData, setFormData] = useState({
     email: '',
@@ -89,18 +109,79 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const validateForm = () => {
+    let isValid = true;
+    
+    if (!formData.email) {
+      setError(t.emailRequired);
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setError(t.emailInvalid);
+      isValid = false;
+    } else {
+      setError('');
+    }
+
+    if (!formData.password) {
+      setError(t.passwordRequired);
+      isValid = false;
+    } else {
+      setError('');
+    }
+
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    // Email validation
+    if (!formData.email.trim()) {
+      setError(translations[language].errors.emailRequired);
+      setLoading(false);
+      return;
+    }
+
+    // Password validation
+    if (!formData.password.trim()) {
+      setError(translations[language].errors.passwordRequired);
+      setLoading(false);
+      return;
+    }
+
     try {
-      const result = await dispatch(login(formData)).unwrap();
-      if (result) {
+      const response = await api.post('/api/users/check-email', { email: formData.email });
+      
+      if (!response.data.exists) {
+        setError(translations[language].errors.emailNotRegistered);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        await authService.login(formData);
         setIsSubmitted(true);
         setTimeout(() => {
-          navigate('/');
-        }, 1500);
+          window.location.href = '/';
+        }, 1000);
+      } catch (error) {
+        if (error.response?.status === 401) {
+          setError(translations[language].errors.invalidPassword);
+        } else {
+          setError(translations[language].errors.loginFailed);
+        }
+        setLoading(false);
       }
     } catch (error) {
-      setError(error);
+      if (error.response?.data?.message === 'Email already exists') {
+        setError(translations[language].errors.emailExists);
+      } else {
+        setError(error.response?.data?.message || translations[language].errors.loginFailed);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,7 +209,7 @@ const Login = () => {
           {!isSubmitted ? (
             <>
               <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-                Giriş Yap
+                {t.title}
               </Typography>
 
               {error && (
@@ -143,7 +224,7 @@ const Login = () => {
                   required
                   fullWidth
                   id="email"
-                  label="E-posta adresi"
+                  label={t.email}
                   name="email"
                   autoComplete="email"
                   autoFocus
@@ -155,7 +236,7 @@ const Login = () => {
                   required
                   fullWidth
                   name="password"
-                  label="Şifre"
+                  label={t.password}
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   autoComplete="current-password"
@@ -198,7 +279,7 @@ const Login = () => {
                       },
                     }}
                   >
-                    Parolamı Unuttum
+                    {t.forgotPassword}
                   </Link>
                 </Box>
 
@@ -208,24 +289,27 @@ const Login = () => {
                   variant="contained"
                   disabled={loading}
                 >
-                  {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+                  {loading ? t.loading : t.loginButton}
                 </SubmitButton>
 
                 <Box sx={{ textAlign: 'center', mt: 2 }}>
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="body2"
-                    sx={{
-                      color: theme.palette.primary.main,
-                      textDecoration: 'none',
-                      '&:hover': {
-                        textDecoration: 'underline',
-                      },
-                    }}
-                  >
-                    Hesabınız yok mu? Kayıt olun
-                  </Link>
+                  <Typography variant="body2">
+                    {t.registerPrompt}{' '}
+                    <Link
+                      component={RouterLink}
+                      to="/register"
+                      variant="body2"
+                      sx={{
+                        color: theme.palette.primary.main,
+                        textDecoration: 'none',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        },
+                      }}
+                    >
+                      {t.register}
+                    </Link>
+                  </Typography>
                 </Box>
               </Box>
             </>
@@ -237,7 +321,7 @@ const Login = () => {
               py: 2 
             }}>
               <AnimatedCheckmark />
-              <Typography variant="h6">Giriş başarılı!</Typography>
+              <Typography variant="h6">{t.success}</Typography>
             </Box>
           )}
         </FormContainer>

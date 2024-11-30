@@ -1,5 +1,6 @@
 import { Box, Typography, CircularProgress } from '@mui/material';
 import StyledButton from '../Common/StyledButton';
+import { useLanguage, translations } from '../../contexts/LanguageContext';
 
 const CheckoutSummary = ({ 
   cartCount, 
@@ -8,6 +9,9 @@ const CheckoutSummary = ({
   isLoading, 
   handleCheckoutClick 
 }) => {
+  const { language } = useLanguage();
+  const t = translations[language].cart;
+
   return (
     <Box
       sx={{
@@ -21,7 +25,7 @@ const CheckoutSummary = ({
       }}
     >
       <Typography variant="h6" gutterBottom sx={{ color: '#0F1111' }}>
-        Ara Toplam ({cartCount} ürün):{' '}
+        {t.subtotal} ({cartCount} {t.items}):{' '}
         <span style={{ color: '#B12704' }}>
           ₺{getCartTotal().toFixed(2)}
         </span>
@@ -42,10 +46,10 @@ const CheckoutSummary = ({
         {isLoading ? (
           <>
             <CircularProgress size={20} />
-            İşleminiz Gerçekleştiriliyor...
+            {t.processing}
           </>
         ) : (
-          'Alışverişi Tamamla'
+          t.checkout
         )}
       </StyledButton>
     </Box>

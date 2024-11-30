@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ProductCard, { ProductsContainer } from '../components/Product/ProductCard';
 import api from '../services/api';
+import { useLanguage, translations } from '../contexts/LanguageContext';
 
 const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -89,6 +90,8 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const productsPerPage = 12;
   const [sortBy, setSortBy] = useState('featured');
+  const { language } = useLanguage();
+  const t = translations[language].homePage;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -108,13 +111,19 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
+  // Helper function to convert price to numeric value
+  const parsePrice = (price) => {
+    // Remove all dots and commas in price and convert to number
+    return parseFloat(price.toString().replace(/[.,]/g, ''));
+  };
+
   // Add sorting function
   const getSortedProducts = (products) => {
     switch (sortBy) {
       case 'priceLow':
-        return [...products].sort((a, b) => a.price - b.price);
+        return [...products].sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
       case 'priceHigh':
-        return [...products].sort((a, b) => b.price - a.price);
+        return [...products].sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
       case 'newest':
         return [...products].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       default:
@@ -150,23 +159,26 @@ const HomePage = () => {
       <FilterContainer>
         <ResultsInfo>
           {filteredProducts.length > 0 ? (
-            `${firstProductIndex}-${lastProductIndex} arası ${filteredProducts.length} sonuç`
+            t.results.showing
+              .replace('{first}', firstProductIndex)
+              .replace('{last}', lastProductIndex)
+              .replace('{total}', filteredProducts.length)
           ) : (
-            'Sonuç bulunamadı'
+            t.results.noResults
           )}
         </ResultsInfo>
         
         <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
-          <InputLabel>Sırala</InputLabel>
+          <InputLabel>{t.sorting.label}</InputLabel>
           <Select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            label="Sırala"
+            label={t.sorting.label}
           >
-            <MenuItem value="featured">Öne Çıkan</MenuItem>
-            <MenuItem value="priceLow">Fiyat: Düşükten Yükseğe</MenuItem>
-            <MenuItem value="priceHigh">Fiyat: Yüksekten Düşüğe</MenuItem>
-            <MenuItem value="newest">En Yeni Gelenler</MenuItem>
+            <MenuItem value="featured">{t.sorting.featured}</MenuItem>
+            <MenuItem value="priceLow">{t.sorting.priceLow}</MenuItem>
+            <MenuItem value="priceHigh">{t.sorting.priceHigh}</MenuItem>
+            <MenuItem value="newest">{t.sorting.newest}</MenuItem>
           </Select>
         </FormControl>
       </FilterContainer>

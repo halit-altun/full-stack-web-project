@@ -76,9 +76,12 @@ const ProductCard = ({ product }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleClick = () => {
-    // Scroll to top on mobile devices
+    // Mobil görünümde sayfanın en üstüne kaydır
     if (isMobile) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({
+        top: 0,
+        behavior: 'instant' // Anlık kaydırma için
+      });
     }
     navigate(`/product/${product._id}`);
   };

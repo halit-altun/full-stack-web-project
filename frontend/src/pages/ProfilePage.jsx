@@ -13,6 +13,9 @@ import { setUser } from '../redux/slices/authSlice';
 import authService from '../services/authService';
 import { toast } from 'react-hot-toast';
 import StyledButton from '../components/Common/StyledButton';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
+import AnimatedCheckmark from '../components/Common/AnimatedCheckmark';
 
 const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -30,6 +33,41 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   alignItems: 'center'
 }));
 
+const SuccessMessage = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  top: {
+    xs: '100px',   
+    sm: '64px',    
+    md: '70px',   
+    lg: '80px'     
+  },
+  left: '50%',
+  transform: 'translateX(-50%)',
+  zIndex: 1200,    
+  minWidth: '300px',
+  maxWidth: '90%',
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  backgroundColor: '#f0fdf4',
+  color: '#166534',
+  padding: theme.spacing(2),
+  borderRadius: theme.spacing(2),
+  border: '1px solid #bbf7d0',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+  animation: 'slideDown 0.5s ease-out',
+  '@keyframes slideDown': {
+    '0%': {
+      opacity: 0,
+      transform: 'translate(-50%, -20px)',
+    },
+    '100%': {
+      opacity: 1,
+      transform: 'translate(-50%, 0)',
+    },
+  },
+}));
+
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -45,6 +83,9 @@ const ProfilePage = () => {
     }
   });
   const [error, setError] = useState(null);
+  const { language } = useLanguage();
+  const t = translations[language].profile;
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,99 +137,124 @@ const ProfilePage = () => {
       const updatedUser = await authService.updateProfile(formData);
       dispatch(setUser(updatedUser));
       setIsEditing(false);
-      toast.success('Profil başarıyla güncellendi');
+      
+
+      setShowSuccess(true);
+      toast.success(t.updateSuccess);
+      
+ 
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
     } catch (error) {
-      setError(error.message || 'Profil güncellenirken bir hata oluştu');
-      toast.error('Profil güncellenirken bir hata oluştu');
+      setError(error.message || t.updateError);
+      toast.error(t.updateError);
     }
   };
 
   return (
-    <PageContainer>
-      <StyledContainer>
-        <Box sx={{ 
-          width: '100%', 
-          maxWidth: '450px', 
-          my: 4 
-        }}>
-          <Paper sx={{ p: 3, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+    <>
+      {/* Success Message */}
+      {showSuccess && (
+        <SuccessMessage>
+          <AnimatedCheckmark 
+            sx={{ 
+              fontSize: 28,
+              color: '#15803d'
+            }} 
+          />
+          <Box>
             <Typography 
-              variant="h5" 
-              gutterBottom 
               sx={{ 
-                color: '#0F1111', 
-                mb: 3,
-                fontWeight: 400
+                fontWeight: 600,
+                fontSize: '1rem',
+                mb: 0.5
               }}
             >
-              Profil Bilgileri
+              {t.updateSuccess}
             </Typography>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: '#166534',
+                opacity: 0.8 
+              }}
+            >
+              {t.profileUpdated}
+            </Typography>
+          </Box>
+        </SuccessMessage>
+      )}
+
+      <PageContainer>
+        <StyledContainer>
+          <Paper sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
+            <Typography variant="h5" gutterBottom>
+              {t.title}
+            </Typography>
+
             {error && (
               <Alert severity="error" sx={{ mb: 2 }}>
                 {error}
               </Alert>
             )}
-            <form onSubmit={handleSubmit}>
+
+            <Box component="form" onSubmit={handleSubmit}>
               <TextField
                 fullWidth
-                label="Ad"
+                label={t.firstName}
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
                 disabled={!isEditing}
                 margin="normal"
+                error={!!errors.firstName}
+                helperText={errors.firstName}
               />
+              
               <TextField
                 fullWidth
-                label="Soyad"
+                label={t.lastName}
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
                 disabled={!isEditing}
                 margin="normal"
+                error={!!errors.lastName}
+                helperText={errors.lastName}
               />
+              
               <TextField
                 fullWidth
-                label="E-posta"
+                label={t.email}
                 name="email"
-                type="email"
                 value={formData.email}
                 onChange={handleChange}
                 disabled={!isEditing}
                 margin="normal"
+                error={!!errors.email}
+                helperText={errors.email}
               />
-              <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-                <TextField
-                  label="Ülke Kodu"
-                  name="phone.countryCode"
-                  value={formData.phone.countryCode}
-                  onChange={handleChange}
-                  disabled={!isEditing}
-                  sx={{ width: '30%' }}
-                />
-                <TextField
-                  label="Telefon Numarası"
-                  name="phone.number"
-                  value={formData.phone.number}
-                  onChange={handlePhoneNumberChange}
-                  error={!!errors.phone?.number}
-                  helperText={errors.phone?.number || "Sadece rakam giriniz (10 haneli)"}
-                  inputProps={{
-                    maxLength: 10,
-                    pattern: '[0-9]*'
-                  }}
-                  disabled={!isEditing}
-                  sx={{ width: '70%' }}
-                />
-              </Box>
+              
+              <TextField
+                fullWidth
+                label={t.phone}
+                name="phone.number"
+                value={formData.phone.number}
+                onChange={handlePhoneNumberChange}
+                disabled={!isEditing}
+                margin="normal"
+                error={!!errors.phone?.number}
+                helperText={errors.phone?.number}
+              />
 
               <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                 {!isEditing ? (
                   <StyledButton
-                    variant="contained"
                     onClick={() => setIsEditing(true)}
+                    variant="contained"
                   >
-                    Düzenle
+                    {t.editButton}
                   </StyledButton>
                 ) : (
                   <>
@@ -208,22 +274,22 @@ const ProfilePage = () => {
                         });
                       }}
                     >
-                      İptal
+                      {t.cancelButton}
                     </StyledButton>
                     <StyledButton
                       type="submit"
                       variant="contained"
                     >
-                      Kaydet
+                      {t.saveButton}
                     </StyledButton>
                   </>
                 )}
               </Box>
-            </form>
+            </Box>
           </Paper>
-        </Box>
-      </StyledContainer>
-    </PageContainer>
+        </StyledContainer>
+      </PageContainer>
+    </>
   );
 };
 

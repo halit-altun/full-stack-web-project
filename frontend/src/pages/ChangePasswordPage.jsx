@@ -9,6 +9,8 @@ import { logout } from '../redux/slices/authSlice';
 import StyledButton from '../components/Common/StyledButton';
 import AuthFooter from '../components/Auth/AuthFooter';
 import AnimatedCheckmark from '../components/Common/AnimatedCheckmark';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
 
 const ChangePasswordPage = () => {
   const navigate = useNavigate();
@@ -22,6 +24,18 @@ const ChangePasswordPage = () => {
   });
   const [error, setError] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language]?.changePassword || {
+    title: 'Change Password',
+    currentPassword: 'Current Password',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm New Password',
+    changeButton: 'Change Password',
+    success: 'Your password has been changed successfully',
+    loginAgain: 'Please login again with your new password',
+    passwordMismatch: 'New passwords do not match',
+    changeError: 'Failed to change password'
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -34,7 +48,7 @@ const ChangePasswordPage = () => {
     e.preventDefault();
     
     if (formData.newPassword !== formData.confirmPassword) {
-      setError('Yeni şifreler eşleşmiyor');
+      setError(t.passwordMismatch);
       return;
     }
 
@@ -51,8 +65,8 @@ const ChangePasswordPage = () => {
       }, 2000);
 
     } catch (error) {
-      setError(error.response?.data?.message || 'Şifre değiştirme işlemi başarısız oldu');
-      toast.error(error.response?.data?.message || 'Şifre değiştirme işlemi başarısız oldu');
+      setError(error.response?.data?.message || t.changeError);
+      toast.error(error.response?.data?.message || t.changeError);
     }
   };
 
@@ -79,7 +93,7 @@ const ChangePasswordPage = () => {
           {!isSubmitted ? (
             <>
               <Typography component="h1" variant="h5" gutterBottom>
-                Şifre Değiştir
+                {t.title}
               </Typography>
               
               {error && (
@@ -92,7 +106,7 @@ const ChangePasswordPage = () => {
                 <TextField
                   fullWidth
                   margin="normal"
-                  label="Mevcut Şifre"
+                  label={t.currentPassword}
                   type="password"
                   name="currentPassword"
                   value={formData.currentPassword}
@@ -104,7 +118,7 @@ const ChangePasswordPage = () => {
                 <TextField
                   fullWidth
                   margin="normal"
-                  label="Yeni Şifre"
+                  label={t.newPassword}
                   type="password"
                   name="newPassword"
                   value={formData.newPassword}
@@ -116,7 +130,7 @@ const ChangePasswordPage = () => {
                 <TextField
                   fullWidth
                   margin="normal"
-                  label="Yeni Şifreyi Tekrar Girin"
+                  label={t.confirmPassword}
                   type="password"
                   name="confirmPassword"
                   value={formData.confirmPassword}
@@ -130,7 +144,7 @@ const ChangePasswordPage = () => {
                   fullWidth
                   variant="contained"
                 >
-                  Şifreyi Değiştir
+                  {t.changeButton}
                 </StyledButton>
               </Box>
             </>
@@ -143,10 +157,10 @@ const ChangePasswordPage = () => {
             }}>
               <AnimatedCheckmark />
               <Typography variant="h6" align="center" gutterBottom>
-                Şifreniz başarıyla değiştirildi
+                {t.success}
               </Typography>
               <Typography variant="body2" align="center" color="text.secondary">
-                Lütfen yeni şifrenizle tekrar giriş yapın
+                {t.loginAgain}
               </Typography>
             </Box>
           )}

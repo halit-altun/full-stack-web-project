@@ -6,6 +6,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import { useState } from 'react';
 import { StyledAddressBox, AddressSelect } from '../../styles/CartPageStyles';
 import StyledButton from '../Common/StyledButton';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { translations } from '../../contexts/LanguageContext';
 
 const DeliveryAddress = ({ 
   isAuthenticated,
@@ -15,6 +17,8 @@ const DeliveryAddress = ({
   setSelectedAddress,
   user
 }) => {
+  const { language } = useLanguage();
+  const t = translations[language].cart.deliveryAddress;
   const [openAddressModal, setOpenAddressModal] = useState(false);
 
   if (!isAuthenticated) {
@@ -29,7 +33,7 @@ const DeliveryAddress = ({
             color: '#0F1111'
           }}
         >
-          Teslimat Adresi
+          {t.title}
         </Typography>
         <Paper 
           elevation={0} 
@@ -45,10 +49,10 @@ const DeliveryAddress = ({
         >
           <LockIcon sx={{ fontSize: 48, color: '#FFD814', mb: 2 }} />
           <Typography variant="h6" align="center" sx={{ mb: 1, fontWeight: 700 }}>
-            Siparişi tamamlamak için giriş yapın
+            {t.loginRequired}
           </Typography>
           <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-            Siparişinizi tamamlamak ve adresinizi seçmek için hesabınıza giriş yapmanız gerekmektedir.
+            {t.loginRequired}
           </Typography>
           <StyledButton
             component={RouterLink}
@@ -58,10 +62,10 @@ const DeliveryAddress = ({
               py: 1
             }}
           >
-            Giriş Yap
+            {t.loginButton}
           </StyledButton>
           <Typography variant="body2" sx={{ mt: 2 }}>
-            Hesabınız yok mu?{' '}
+            {t.noAccount} {' '}
             <Link 
               component={RouterLink} 
               to="/register" 
@@ -74,7 +78,7 @@ const DeliveryAddress = ({
                 }
               }}
             >
-              Hemen kaydolun
+              {t.registerNow}
             </Link>
           </Typography>
         </Paper>
@@ -97,7 +101,7 @@ const DeliveryAddress = ({
           color: '#0F1111'
         }}
       >
-        Teslimat Adresi
+        {t.title}
       </Typography>
 
       {addresses.length === 0 ? (
@@ -128,7 +132,7 @@ const DeliveryAddress = ({
               mb: 1
             }}
           >
-            Kayıtlı adresiniz bulunmamaktadır
+            {t.noAddresses}
           </Typography>
           <Typography 
             variant="body2" 
@@ -138,7 +142,7 @@ const DeliveryAddress = ({
               textAlign: 'center' 
             }}
           >
-            Siparişinizi tamamlamak için lütfen bir teslimat adresi ekleyin
+            {t.addAddress}
           </Typography>
           <Button
             component={Link}
@@ -156,7 +160,7 @@ const DeliveryAddress = ({
               px: 4
             }}
           >
-            Adres Ekle
+            {t.addAddress}
           </Button>
         </Box>
       ) : (
@@ -165,7 +169,7 @@ const DeliveryAddress = ({
             <LocationOnIcon sx={{ color: '#FFD814' }} />
             <Box sx={{ flex: 1 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 500, color: '#0F1111' }}>
-                {selectedAddress?.title || 'Adres Seçin'}
+                {selectedAddress?.title || t.selectAddress}
               </Typography>
               {selectedAddress && (
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -183,7 +187,7 @@ const DeliveryAddress = ({
             fullWidth
           >
             <DialogTitle sx={{ borderBottom: '1px solid #DDD' }}>
-              Teslimat Adresi Seçin
+              {t.modalTitle}
             </DialogTitle>
             <DialogContent sx={{ mt: 2 }}>
               {addresses.map((address) => (
@@ -215,7 +219,7 @@ const DeliveryAddress = ({
                 component={Link}
                 to="/account/addresses"
               >
-                Yeni Adres Ekle
+                {t.addNewAddress}
               </StyledButton>
             </DialogActions>
           </Dialog>

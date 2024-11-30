@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Link, Divider } from '@mui/material';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const FooterLink = ({ href, children, isMobile }) => (
   <Link 
@@ -19,6 +20,10 @@ const FooterLink = ({ href, children, isMobile }) => (
 );
 
 const AuthFooter = ({ isMobile }) => {
+  const { language, translations } = useLanguage();
+  const t = translations[language].authFooter;
+  const currentYear = new Date().getFullYear();
+
   return (
     <Box
       component="footer"
@@ -40,9 +45,9 @@ const AuthFooter = ({ isMobile }) => {
           width: '100%'
         }}
       >
-        <FooterLink href="#" isMobile={isMobile}>Kullanım Koşulları</FooterLink>
-        <FooterLink href="#" isMobile={isMobile}>Gizlilik Bildirimi</FooterLink>
-        <FooterLink href="#" isMobile={isMobile}>Yardım</FooterLink>
+        <FooterLink href="#" isMobile={isMobile}>{t.termsOfUse}</FooterLink>
+        <FooterLink href="#" isMobile={isMobile}>{t.privacyNotice}</FooterLink>
+        <FooterLink href="#" isMobile={isMobile}>{t.help}</FooterLink>
       </Box>
 
       <Typography 
@@ -50,7 +55,7 @@ const AuthFooter = ({ isMobile }) => {
         color="text.secondary" 
         sx={{ pb: 2, width: '100%', textAlign: 'center' }}
       >
-        © 2024 Amazing. Tüm hakları saklıdır.
+        {t.copyright.replace('{year}', currentYear)}
       </Typography>
     </Box>
   );

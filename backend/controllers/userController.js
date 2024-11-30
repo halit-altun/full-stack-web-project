@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
     if (userExistsWithEmail) {
       return res.status(400).json({ 
         success: false,
-        message: 'Bu e-posta adresi zaten kullanılmaktadır'
+        message: 'This email address is already in use'
       });
     }
 
@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
     if (userExistsWithPhone) {
       return res.status(400).json({ 
         success: false,
-        message: 'Bu telefon numarası zaten kullanılmaktadır'
+        message: 'This phone number is already in use'
       });
     }
 
@@ -62,7 +62,7 @@ const registerUser = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({
-      message: 'Kullanıcı kaydı sırasında bir hata oluştu',
+      message: 'An error occurred during user registration',
       error: error.message
     });
   }
@@ -89,19 +89,33 @@ const loginUser = async (req, res) => {
         }
       });
     } else {
-      res.status(401).json({ message: 'Geçersiz email veya şifre' });
+      res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Sunucu hatası' });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
 const updateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-
     if (!user) {
-      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if phone number is already in use by another user
+    if (req.body.phone) {
+      const phoneExists = await User.findOne({ 
+        phone: req.body.phone,
+        _id: { $ne: req.user.id }
+      });
+      
+      if (phoneExists) {
+        return res.status(400).json({ 
+          message: 'This phone number is already in use',
+          messageKey: 'phoneExists'  // Add a messageKey for frontend translation
+        });
+      }
     }
 
     const { firstName, lastName, email, phone } = req.body;
@@ -110,16 +124,28 @@ const updateProfile = async (req, res) => {
     if (email && email !== user.email) {
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: 'Bu email adresi zaten kullanımda' });
+        return res.status(400).json({ message: 'This email address is already in use' });
       }
     }
 
-    // Phone number validation
-    if (req.body.phone?.number) {
-      const phoneNumber = req.body.phone.number;
-      if (!/^\d{10}$/.test(phoneNumber)) {
+    // Phone number validation and check if it's already in use
+    if (phone?.number && phone.number !== user.phone.number) {
+      // First validate format
+      if (!/^\d{10}$/.test(phone.number)) {
         return res.status(400).json({
-          message: 'Telefon numarası 10 haneli ve sadece rakamlardan oluşmalıdır'
+          message: 'Phone number must be 10 digits and only contain numbers'
+        });
+      }
+
+      // Then check if phone number is already in use
+      const existingUserWithPhone = await User.findOne({
+        'phone.number': phone.number,
+        _id: { $ne: user._id } // Exclude current user from check
+      });
+
+      if (existingUserWithPhone) {
+        return res.status(400).json({
+          message: 'This phone number is already in use'
         });
       }
     }
@@ -149,11 +175,11 @@ const updateProfile = async (req, res) => {
     res.json(userResponse);
 
   } catch (error) {
-    logger.error('Profile update error:', {
+    logger.error('Profile update failed:', {
       error: error.message,
-      stack: error.stack
+      userId: req.user?.id
     });
-    res.status(500).json({ message: 'Profil güncellenirken bir hata oluştu' });
+    res.status(500).json({ message: 'Profile update failed' });
   }
 };
 
@@ -171,7 +197,7 @@ const getUserOrders = async (req, res) => {
     if (!orders) {
       return res.status(404).json({
         success: false,
-        message: 'Siparişler bulunamadı'
+        message: 'Orders not found'
       });
     }
 
@@ -188,7 +214,7 @@ const getUserOrders = async (req, res) => {
     });
     res.status(500).json({ 
       success: false,
-      message: 'Siparişler getirilirken bir hata oluştu' 
+      message: 'An error occurred while fetching orders' 
     });
   }
 };
@@ -201,7 +227,7 @@ const changePassword = async (req, res) => {
     // Check current password
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Mevcut şifre yanlış' });
+      return res.status(400).json({ message: 'Current password is incorrect' });
     }
 
     // Hash new password
@@ -216,13 +242,13 @@ const changePassword = async (req, res) => {
       userId: user._id
     });
 
-    res.json({ message: 'Şifre başarıyla değiştirildi' });
+    res.json({ message: 'Password changed successfully' });
   } catch (error) {
     logger.error('Password change error:', {
       error: error.message,
       userId: req.user?.id
     });
-    res.status(500).json({ message: 'Şifre değiştirme işlemi başarısız oldu' });
+    res.status(500).json({ message: 'Password change failed' });
   }
 };
 
@@ -239,7 +265,7 @@ const resetPassword = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        message: 'Şifre sıfırlama linki geçersiz veya süresi dolmuş'
+        message: 'Invalid or expired password reset link'
       });
     }
 
@@ -261,7 +287,7 @@ const resetPassword = async (req, res) => {
 
     res.json({ 
       success: true,
-      message: 'Şifreniz başarıyla güncellendi'
+      message: 'Password reset successfully'
     });
 
   } catch (error) {
@@ -272,7 +298,7 @@ const resetPassword = async (req, res) => {
     
     res.status(500).json({ 
       success: false,
-      message: 'Şifre sıfırlama başarısız oldu'
+      message: 'Password reset failed'
     });
   }
 };
@@ -285,7 +311,7 @@ const forgotPassword = async (req, res) => {
     if (!email) {
       return res.status(400).json({
         success: false,
-        message: 'Lütfen e-posta adresinizi giriniz'
+        message: 'Please enter your email address'
       });
     }
 
@@ -294,7 +320,7 @@ const forgotPassword = async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({
         success: false,
-        message: 'Geçersiz e-posta formatı'
+        message: 'Invalid email format'
       });
     }
 
@@ -304,7 +330,7 @@ const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı'
+        message: 'No user found with this email address'
       });
     }
 
@@ -321,7 +347,7 @@ const forgotPassword = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi'
+      message: 'Password reset link sent to your email address'
     });
 
   } catch (error) {
@@ -332,8 +358,24 @@ const forgotPassword = async (req, res) => {
     
     res.status(500).json({ 
       success: false,
-      message: 'Şifre sıfırlama isteği gönderilemedi. Lütfen daha sonra tekrar deneyin.'
+      message: 'Password reset request failed. Please try again later.'
     });
+  }
+};
+
+// Email kontrolü için yeni fonksiyon
+const checkEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    
+    res.json({ exists: !!user });
+  } catch (error) {
+    logger.error('Email check failed:', {
+      error: error.message,
+      email: req.body.email
+    });
+    res.status(500).json({ message: 'Email check failed' });
   }
 };
 
@@ -344,5 +386,6 @@ module.exports = {
   getUserOrders,
   changePassword,
   resetPassword,
-  forgotPassword
+  forgotPassword,
+  checkEmail
 };

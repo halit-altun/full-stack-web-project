@@ -21,6 +21,7 @@ const authService = {
 
   logout: () => {
     localStorage.removeItem('user');
+    window.location.href = '/login';
   },
 
   register: async (userData) => {

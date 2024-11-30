@@ -5,6 +5,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LockIcon from '@mui/icons-material/Lock';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
+import { useEffect } from 'react';
 
 const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -33,52 +36,63 @@ const MenuCard = styled(Paper)(({ theme }) => ({
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language].dashboard;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const menuItems = [
     {
-      icon: <PersonIcon sx={{ fontSize: 40, color: '#f90' }} />,
-      title: 'Profil Bilgileri',
-      description: 'Kişisel bilgilerinizi görüntüleyin ve düzenleyin',
-      onClick: () => navigate('/account/profile')
+      icon: <PersonIcon sx={{ color: '#f90' }} />,
+      title: t.profile.title,
+      description: t.profile.description,
+      path: '/account/profile',
     },
     {
-      icon: <ShoppingBagIcon sx={{ fontSize: 40, color: '#f90' }} />,
-      title: 'Siparişlerim',
-      description: 'Siparişlerinizi görüntüleyin ve takip edin',
-      onClick: () => navigate('/account/orders')
+      icon: <ShoppingBagIcon sx={{ color: '#f90' }} />,
+      title: t.orders.title,
+      description: t.orders.description,
+      path: '/account/orders',
     },
     {
-      icon: <LocationOnIcon sx={{ fontSize: 40, color: '#f90' }} />,
-      title: 'Adreslerim',
-      description: 'Kayıtlı adreslerinizi yönetin',
-      onClick: () => navigate('/account/addresses')
+      icon: <LocationOnIcon sx={{ color: '#f90' }} />,
+      title: t.addresses.title,
+      description: t.addresses.description,
+      path: '/account/addresses',
     },
     {
-      icon: <LockIcon sx={{ fontSize: 40, color: '#f90' }} />,
-      title: 'Şifre Değiştir',
-      description: 'Hesap şifrenizi güncelleyin',
-      onClick: () => navigate('/account/change-password')
+      icon: <LockIcon sx={{ color: '#f90' }} />,
+      title: t.security.title,
+      description: t.security.description,
+      path: '/account/change-password',
     }
   ].map(item => ({
     ...item,
     titleStyle: { 
       color: '#0F1111',  // Dark black color
-      fontWeight: 500,   // Semi-bold font
-      fontSize: '1.1rem' // Bi
+      fontWeight: 500,  
+      fontSize: '1.1rem' 
     }
   }));
 
   return (
     <PageContainer>
       <StyledContainer>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h4" gutterBottom sx={{ color: '#0F1111' }}>
-            Hesabım
+        <Box sx={{ mb: 4 }}>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            gutterBottom
+            sx={{ color: '#0F1111' }}
+          >
+            {t.title}
           </Typography>
           <Grid container spacing={3}>
             {menuItems.map((item, index) => (
               <Grid item xs={12} sm={6} md={6} key={index}>
-                <MenuCard onClick={item.onClick}>
+                <MenuCard onClick={() => navigate(item.path)}>
                   <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
                     {item.icon}
                     <Box>

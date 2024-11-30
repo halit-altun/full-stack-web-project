@@ -10,6 +10,8 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 import StyledButton from '../components/Common/StyledButton';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
 
 const waveAnimation = keyframes`
   0% {
@@ -195,6 +197,14 @@ const PageWrapper = styled(Box)({
   minHeight: '100vh',
 });
 
+const categoryMapping = {
+  'Elektronik': 'electronics',
+  'Ev & Yaşam': 'homeAndLiving',
+  'Moda': 'fashion',
+  'Mutfak': 'kitchen',
+  'Oyun & Hobi': 'gamesAndHobbies'
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -210,7 +220,13 @@ const ProductDetail = () => {
   const { addToCart, cartItems } = useCart();
   const navigate = useNavigate();
   const [alertOpen, setAlertOpen] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
   const [alertMessage, setAlertMessage] = useState('');
+  
+  // Get current quantity from cart
+  const currentCartItem = cartItems.find(item => item?.id === product?.id);
+  const currentQuantity = currentCartItem ? currentCartItem.quantity : 0;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -265,27 +281,25 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = () => {
-    const currentCartItem = cartItems.find(item => item.id === product.id);
-    const currentQuantity = currentCartItem ? currentCartItem.quantity : 0;
-    
     if (currentQuantity + quantity <= product.count) {
       addToCart(product, quantity);
     } else {
-      setAlertMessage(`En fazla ${product.count} adet ekleyebilirsiniz. Sepetinizde zaten ${currentQuantity} adet bulunuyor.`);
+      setAlertMessage(t.productDetail.alert.maxQuantity
+        .replace('{max}', product.count)
+        .replace('{current}', currentQuantity));
       setAlertOpen(true);
       setTimeout(() => setAlertOpen(false), 5000);
     }
   };
 
   const handleBuyNow = () => {
-    const currentCartItem = cartItems.find(item => item.id === product.id);
-    const currentQuantity = currentCartItem ? currentCartItem.quantity : 0;
-    
     if (currentQuantity + quantity <= product.count) {
       addToCart(product, quantity);
       navigate('/cart');
     } else {
-      setAlertMessage(`En fazla ${product.count} adet ekleyebilirsiniz. Sepetinizde zaten ${currentQuantity} adet bulunuyor.`);
+      setAlertMessage(t.productDetail.alert.maxQuantity
+        .replace('{max}', product.count)
+        .replace('{current}', currentQuantity));
       setAlertOpen(true);
       setTimeout(() => setAlertOpen(false), 5000);
     }
@@ -457,7 +471,7 @@ const ProductDetail = () => {
               sx={{ color: '#f39c12' }}
             />
             <Typography variant="body2" sx={{ ml: 1, color: '#007185' }}>
-              {product.rating} puan
+              {product.rating} {t.productDetail.rating}
             </Typography>
           </Box>
 
@@ -470,9 +484,17 @@ const ProductDetail = () => {
           <Divider sx={{ my: 2 }} />
 
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1" color="success.main" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography 
+              variant="subtitle1" 
+              color="success.main"
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1  
+              }}
+            >
               <LocalShippingIcon />
-              Hızlı Teslimat
+              {t.productDetail.fastDelivery}
             </Typography>
           </Box>
 
@@ -485,7 +507,7 @@ const ProductDetail = () => {
             color="text.secondary"
             sx={{ mb: 2 }}
           >
-            Kategori: {product.category}
+            {t.productDetail.category}: {t.categories[categoryMapping[product.category]]}
           </Typography>
         </DetailSection>
 
@@ -499,11 +521,11 @@ const ProductDetail = () => {
           </Typography>
 
           <Box sx={{ mt: 1, mb: 2 }}>
-            <Typography variant="body2" color="success.main" sx={{ fontWeight: 500 }}>
-              KARGO BEDAVA
+            <Typography variant="body2" color="success.main">
+              {t.productDetail.freeShipping}
             </Typography>
             <Typography variant="body2" sx={{ color: '#565959', fontSize: '14px', mt: 0.5 }}>
-              Amazing Prime ile yarın teslim
+              {t.productDetail.nextDayDelivery}
             </Typography>
           </Box>
 
@@ -526,7 +548,7 @@ const ProductDetail = () => {
             <LocationOnIcon sx={{ color: '#565959', fontSize: 20 }} />
             <Box>
               <Typography variant="body2" sx={{ color: '#565959' }}>
-                Teslimat adresi seçin
+                {t.productDetail.selectDeliveryAddress}
               </Typography>
               {postalCode.length === 5 && (
                 <Typography variant="body2" sx={{ color: '#0F1111', fontWeight: 500 }}>
@@ -536,30 +558,17 @@ const ProductDetail = () => {
             </Box>
           </Box>
 
-          <Typography variant="h6" sx={{ 
-            color: '#007600', 
-            fontSize: '18px', 
-            fontWeight: 500,
-            mb: 2 
-          }}>
-            Stokta var
+          <Typography variant="h6" sx={{ color: '#000000' }}>
+            {t.productDetail.inStock}
           </Typography>
 
-          <Typography variant="body2" sx={{ 
-            color: '#0F1111', 
-            fontSize: '14px',
-            mb: 2 
-          }}>
-            Satıcı: <span style={{ color: '#007185' }}>Amazing</span>
+          <Typography variant="body2" sx={{ color: '#000000' }}>
+            {t.productDetail.seller}: <span style={{ color: '#007185' }}>Amazing</span>
           </Typography>
 
           <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" sx={{ 
-              color: '#0F1111', 
-              fontSize: '14px',
-              mb: 0.5 
-            }}>
-              Adet:
+            <Typography variant="body2">
+              {t.productDetail.quantity}:
             </Typography>
             <select 
               value={quantity}
@@ -591,7 +600,7 @@ const ProductDetail = () => {
               boxShadow: 'none'
             }}
           >
-            Sepete Ekle
+            {t.productDetail.addToCart}
           </AddToCartButton>
 
           <BuyNowButton 
@@ -605,7 +614,7 @@ const ProductDetail = () => {
               boxShadow: 'none'
             }}
           >
-            Hemen Al
+            {t.productDetail.buyNow}
           </BuyNowButton>
         </PurchaseSection>
 
@@ -626,7 +635,7 @@ const ProductDetail = () => {
                 fontWeight: 700 
               }}
             >
-              Teslimat adresinizi girin
+              {t.productDetail.modal.title}
             </Typography>
             <Typography 
               variant="body2" 
@@ -635,11 +644,11 @@ const ProductDetail = () => {
                 mb: 2
               }}
             >
-              Türkiye'de bir posta kodu girin
+              {t.productDetail.modal.subtitle}
             </Typography>
             <TextField
               fullWidth
-              label="Posta Kodu"
+              label={t.productDetail.modal.postalCode}
               value={postalCode}
               onChange={handlePostalCodeChange}
               error={!!error}
@@ -661,14 +670,14 @@ const ProductDetail = () => {
                 variant="outlined"
                 className="outlined"
               >
-                İptal
+                {t.productDetail.modal.cancel}
               </StyledButton>
               <StyledButton
                 onClick={handleModalClose}
                 variant="contained"
                 disabled={postalCode.length !== 5}
               >
-                Onayla
+                {t.productDetail.modal.confirm}
               </StyledButton>
             </Box>
           </AddressModal>

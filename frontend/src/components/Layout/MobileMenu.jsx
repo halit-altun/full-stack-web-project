@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Drawer,
   Typography,
@@ -11,10 +11,10 @@ import {
 import {
   Close as CloseIcon,
   Person,
-  Category,
 } from '@mui/icons-material';
 import { StyledComponents } from './styles/NavbarStyles';
 import { useAuth } from '../../contexts/AuthContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const MobileMenu = ({ 
   isOpen, 
@@ -23,6 +23,40 @@ const MobileMenu = ({
   handleLogout 
 }) => {
   const { user, isAuthenticated } = useAuth();
+  const { language, translations } = useLanguage();
+  const t = translations[language];
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    onClose(); // Close drawer
+    window.scrollTo(0, 0); // Scroll to top
+    navigate(path);
+  };
+
+  const categoryMapping = {
+    'Elektronik': 'electronics',
+    'Ev & Yaşam': 'homeAndLiving',
+    'Moda': 'fashion',
+    'Mutfak': 'kitchen',
+    'Oyun & Hobi': 'gamesAndHobbies'
+  };
+
+  const reverseMapping = {
+    tr: {
+      electronics: 'Elektronik',
+      homeAndLiving: 'Ev & Yaşam',
+      fashion: 'Moda',
+      kitchen: 'Mutfak',
+      gamesAndHobbies: 'Oyun & Hobi'
+    },
+    en: {
+      electronics: 'Electronics',
+      homeAndLiving: 'Home & Living',
+      fashion: 'Fashion',
+      kitchen: 'Kitchen',
+      gamesAndHobbies: 'Games & Hobbies'
+    }
+  };
 
   return (
     <Drawer 
@@ -46,44 +80,56 @@ const MobileMenu = ({
         >
           <CloseIcon />
         </IconButton>
-        <Typography>Menü</Typography>
+        <Typography>Menu</Typography>
       </StyledComponents.DrawerHeader>
 
-      <Box component={Link} to={isAuthenticated ? "/account" : "/login"} 
-        onClick={onClose} 
+      <Box component="div" 
         sx={{
           display: 'flex',
           alignItems: 'center',
           padding: '12px 16px',
           backgroundColor: '#232f3e',
           color: 'white',
-          textDecoration: 'none',
           borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-          '&:hover': {
-            color: '#f90',  
-            '& .MuiSvgIcon-root': {
-              color: '#f90'
-            }
-          }
         }}>
         <Person sx={{ 
           fontSize: 24, 
           marginRight: 1,
-          transition: 'color 0.2s'
         }} />
         <Typography>
           {isAuthenticated 
-            ? `Merhaba, ${user?.firstName || 'Kullanıcı'}`
-            : 'Merhaba, Giriş yapın'
-          }
+            ? `${t.login.greeting}, ${user?.firstName || t.login.user}`
+            : t.login.loginGreeting}
         </Typography>
       </Box>
 
       <StyledComponents.DrawerList>
         <Typography className="section-header">
-          <Category sx={{ verticalAlign: 'middle', mr: 1 }} />
-          Kategoriler
+          {t.categories.title || 'Kategoriler'}
         </Typography>
+        <ListItem 
+          button 
+          component={Link}
+          to="/"
+          onClick={onClose}
+          sx={{
+            borderRadius: 1,
+            mb: 0.5,
+            cursor: 'pointer'
+          }}
+        >
+          <ListItemText 
+            primary={t.categories.all} 
+            sx={{
+              '& .MuiTypography-root': {
+                color: '#f90',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                pl: 2
+              }
+            }}
+          />
+        </ListItem>
         {categories.map((category) => (
           <ListItem 
             button 
@@ -93,7 +139,7 @@ const MobileMenu = ({
             onClick={onClose}
           >
             <ListItemText 
-              primary={category} 
+              primary={reverseMapping[language][categoryMapping[category]]} 
               sx={{
                 '& .MuiTypography-root': {
                   color: '#f90',
@@ -108,28 +154,28 @@ const MobileMenu = ({
 
         <Divider sx={{ my: 1 }} />
 
-        <Typography className="section-header">Trend Olanlar</Typography>
+        <Typography className="section-header">{t.homePage.trending}</Typography>
         <ListItem button>
-          <ListItemText primary="Çok Satanlar" />
+          <ListItemText primary={t.homePage.bestSellers} />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Yeni Çıkanlar" />
+          <ListItemText primary={t.homePage.newReleases} />
         </ListItem>
 
-        <Typography className="section-header">Dijital İçerik ve Cihazlar</Typography>
+        <Typography className="section-header">{t.homePage.digitalContent}</Typography>
         <ListItem button>
           <ListItemText primary="Amazing Prime Video" />
         </ListItem>
         <ListItem button>
-          <ListItemText primary="Amazing Müzik" />
+          <ListItemText primary="Amazing Music" />
         </ListItem>
         <ListItem button>
           <ListItemText primary="Prime Gaming" />
         </ListItem>
 
-        <Typography className="section-header">Alışveriş Yap</Typography>
+        <Typography className="section-header">{t.homePage.shop}</Typography>
         <ListItem button>
-          <ListItemText primary="Günün Fırsatları" />
+          <ListItemText primary={t.homePage.todaysDeals} />
         </ListItem>
         <ListItem button>
           <ListItemText primary="Amazing Outlet" />
@@ -137,10 +183,17 @@ const MobileMenu = ({
 
         {isAuthenticated ? (
           <>
-            <Typography className="section-header">Hesabım</Typography>
-            <ListItem button component={Link} to="/account" onClick={onClose}>
+            <Typography className="section-header">{t.dashboard.title}</Typography>
+            <ListItem 
+              button 
+              onClick={() => handleNavigation('/account')}
+              sx={{ 
+                padding: '12px 16px',
+                cursor: 'pointer'
+              }}
+            >
               <ListItemText 
-                primary="Hesap Ayarlarım" 
+                primary={t.dashboard.title}
                 sx={{ 
                   '& .MuiTypography-root': { 
                     color: '#f90',
@@ -151,18 +204,7 @@ const MobileMenu = ({
             </ListItem>
             <ListItem button component={Link} to="/orders" onClick={onClose}>
               <ListItemText 
-                primary="Siparişlerim" 
-                sx={{ 
-                  '& .MuiTypography-root': { 
-                    color: '#f90',
-                    fontWeight: 700
-                  }
-                }} 
-              />
-            </ListItem>
-            <ListItem button component={Link} to="/account/addresses" onClick={onClose}>
-              <ListItemText 
-                primary="Adreslerim" 
+                primary={t.dashboard.orders.title}
                 sx={{ 
                   '& .MuiTypography-root': { 
                     color: '#f90',
@@ -186,7 +228,7 @@ const MobileMenu = ({
               }}
             >
               <ListItemText 
-                primary="Çıkış Yap" 
+                primary={t.login.logoutButton}
                 sx={{ 
                   '& .MuiTypography-root': { 
                     color: '#ffffff',
@@ -198,12 +240,12 @@ const MobileMenu = ({
           </>
         ) : (
           <>
-            <Typography className="section-header">Yardım ve Ayarlar</Typography>
+            <Typography className="section-header">{t.homePage.helpSettings}</Typography>
             <ListItem button component={Link} to="/login">
-              <ListItemText primary="Giriş Yap" />
+              <ListItemText primary={t.login.loginButton} />
             </ListItem>
             <ListItem button component={Link} to="/register">
-              <ListItemText primary="Kayıt Ol" />
+              <ListItemText primary={t.login.register} />
             </ListItem>
           </>
         )}

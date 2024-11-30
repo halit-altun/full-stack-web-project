@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import ProductCard, { ProductsContainer as BaseProductsContainer } from '../components/Product/ProductCard';
 import api from '../services/api';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
 
 // Page container to ensure footer stays at bottom
 const PageContainer = styled(Box)(({ theme }) => ({
@@ -107,6 +109,8 @@ const SearchResults = () => {
   const [page, setPage] = useState(1);
   const productsPerPage = 12;
   const [sortBy, setSortBy] = useState('featured');
+  const { language } = useLanguage();
+  const t = translations[language].searchResults;
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -164,26 +168,29 @@ const SearchResults = () => {
       <FilterContainer>
         <ResultsInfo>
           {products.length > 0 ? (
-            `${firstProductIndex}-${lastProductIndex} arası ${products.length} sonuç`
+            t.showing
+              .replace('{first}', firstProductIndex)
+              .replace('{last}', lastProductIndex)
+              .replace('{total}', products.length)
           ) : searchQuery ? (
-            `"${searchQuery}" için sonuç bulunamadı`
+            t.noResultsFor.replace('{query}', searchQuery)
           ) : (
-            'Lütfen arama yapınız'
+            t.pleaseSearch
           )}
         </ResultsInfo>
         
         {products.length > 0 && (
           <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Sırala</InputLabel>
+            <InputLabel>{t.sorting.label}</InputLabel>
             <Select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              label="Sırala"
+              label={t.sorting.label}
             >
-              <MenuItem value="featured">Öne Çıkan</MenuItem>
-              <MenuItem value="priceLow">Fiyat: Düşükten Yükseğe</MenuItem>
-              <MenuItem value="priceHigh">Fiyat: Yüksekten Düşüğe</MenuItem>
-              <MenuItem value="newest">En Yeni Gelenler</MenuItem>
+              <MenuItem value="featured">{t.sorting.featured}</MenuItem>
+              <MenuItem value="priceLow">{t.sorting.priceLow}</MenuItem>
+              <MenuItem value="priceHigh">{t.sorting.priceHigh}</MenuItem>
+              <MenuItem value="newest">{t.sorting.newest}</MenuItem>
             </Select>
           </FormControl>
         )}
@@ -209,8 +216,8 @@ const SearchResults = () => {
             color: 'text.secondary',
             fontSize: '1.1rem'
           }}>
-            <div>Aramanızla eşleşen ürün bulunamadı.</div>
-            <div>Lütfen farklı anahtar kelimelerle tekrar deneyin.</div>
+            <div>{t.noResults}</div>
+            <div>{t.tryAgain}</div>
           </Box>
         )}
       </StyledContainer>

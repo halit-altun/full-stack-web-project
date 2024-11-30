@@ -20,6 +20,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import addressService from '../services/addressService';
 import { toast } from 'react-hot-toast';
 import StyledButton from '../components/Common/StyledButton';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../contexts/LanguageContext';
 
 const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -46,6 +48,8 @@ const AddressCard = styled(Paper)(({ theme }) => ({
 
 const AddressForm = ({ open, handleClose, editAddress }) => {
   const { addAddress, setAddresses } = useAddresses();
+  const { language } = useLanguage();
+  const t = translations[language].addresses;
   const [formData, setFormData] = useState({
     title: '',
     address: '',
@@ -86,16 +90,16 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
             addr._id === editAddress._id ? response.address : addr
           )
         );
-        toast.success('Adres başarıyla güncellendi');
+        toast.success(t.updateSuccess);
       } else {
         // Add new address
         const response = await addressService.createAddress(formData);
         addAddress(response.address);
-        toast.success('Adres başarıyla eklendi');
+        toast.success(t.addSuccess);
       }
       handleClose();
     } catch (error) {
-      toast.error(error.message || 'İşlem sırasında bir hata oluştu');
+      toast.error(error.message || t.operationError);
     }
   };
 
@@ -103,12 +107,12 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <Box sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom>
-          {editAddress ? 'Adresi Düzenle' : 'Yeni Adres Ekle'}
+          {editAddress ? t.editAddress : t.addNewAddress}
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Adres Başlığı"
+            label={t.addressTitle}
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             margin="normal"
@@ -116,7 +120,7 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
           />
           <TextField
             fullWidth
-            label="Açık Adres"
+            label={t.fullAddress}
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
             margin="normal"
@@ -126,7 +130,7 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
           />
           <TextField
             fullWidth
-            label="Şehir"
+            label={t.city}
             value={formData.city}
             onChange={(e) => setFormData({ ...formData, city: e.target.value })}
             margin="normal"
@@ -134,7 +138,7 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
           />
           <TextField
             fullWidth
-            label="İlçe"
+            label={t.district}
             value={formData.district}
             onChange={(e) => setFormData({ ...formData, district: e.target.value })}
             margin="normal"
@@ -142,7 +146,7 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
           />
           <TextField
             fullWidth
-            label="Posta Kodu"
+            label={t.postalCode}
             value={formData.postalCode}
             onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
             margin="normal"
@@ -169,7 +173,7 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
                 textTransform: 'none'
               }}
             >
-              İptal
+              {t.cancel}
             </Button>
             <Button
               type="submit"
@@ -189,7 +193,7 @@ const AddressForm = ({ open, handleClose, editAddress }) => {
                 textTransform: 'none'
               }}
             >
-              {editAddress ? 'Güncelle' : 'Ekle'}
+              {editAddress ? t.update : t.add}
             </Button>
           </Box>
         </form>
@@ -206,6 +210,8 @@ const AddressesPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
+  const t = translations[language].addresses;
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -213,7 +219,7 @@ const AddressesPage = () => {
         const response = await addressService.getAddresses();
         setAddresses(response.addresses);
       } catch (error) {
-        toast.error('Adresler yüklenirken bir hata oluştu');
+        toast.error(t.loadError);
       } finally {
         setLoading(false);
       }
@@ -237,7 +243,7 @@ const AddressesPage = () => {
 
   const handleDeleteAddress = async (addressId) => {
     if (!addressId || typeof addressId !== 'string' || !addressId.match(/^[0-9a-fA-F]{24}$/)) {
-      toast.error('Geçersiz adres ID\'si');
+      toast.error(t.invalidAddressId);
       return;
     }
 
@@ -246,9 +252,9 @@ const AddressesPage = () => {
       setAddresses(prevAddresses => 
         prevAddresses.filter(address => address._id !== addressId)
       );
-      toast.success('Adres başarıyla silindi');
+      toast.success(t.deleteSuccess);
     } catch (error) {
-      toast.error(error.message || 'Adres silinirken bir hata oluştu');
+      toast.error(error.message || t.deleteError);
     }
   };
 
@@ -269,7 +275,7 @@ const AddressesPage = () => {
       <StyledContainer>
         <Box sx={{ flex: 1 }}>
           <Typography variant="h4" gutterBottom sx={{ color: '#000000' }}>
-            Adreslerim
+            {t.pageTitle}
           </Typography>
           <Box sx={{ mb: 3 }}>
             <StyledButton
@@ -277,7 +283,7 @@ const AddressesPage = () => {
               startIcon={<AddIcon />}
               onClick={() => setOpenDialog(true)}
             >
-              Yeni Adres Ekle
+              {t.addNewAddress}
             </StyledButton>
           </Box>
 

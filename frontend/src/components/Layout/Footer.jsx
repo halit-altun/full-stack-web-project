@@ -1,8 +1,8 @@
 import { Box, Container, Grid, Typography, Link, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
-
+import TranslateIcon from '@mui/icons-material/Translate';
+import { useLanguage, translations } from '../../contexts/LanguageContext';
 
 const FooterContainer = styled(Box)(({ theme }) => ({
   backgroundColor: '#232F3E',
@@ -25,7 +25,10 @@ const FooterBottom = styled(Box)(({ theme }) => ({
   margin: '0 !important',
   [theme.breakpoints.down('sm')]: {
     padding: '10px 0',
-  }
+  },
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
 }));
 
 const FooterLink = styled(Link)(({ theme }) => ({
@@ -71,7 +74,27 @@ const BackToTopButton = styled(Button)(({ theme }) => ({
   }
 }));
 
+const LanguageButton = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  cursor: 'pointer',
+  padding: '8px',
+  borderRadius: '2px',
+  '&:hover': {
+    outline: '1px solid #ffffff',
+  }
+}));
+
+const FlagIcon = styled('img')({
+  width: '24px',
+  height: '16px',
+  marginRight: '8px'
+});
+
 function Footer() {
+  const { language, toggleLanguage } = useLanguage();
+  const t = translations[language].footer;
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -86,7 +109,7 @@ function Footer() {
         disableRipple
       >
         <KeyboardArrowUpIcon sx={{ mr: 1 }} />
-        Başa Dön
+        {t.backToTop}
       </BackToTopButton>
 
       <FooterContainer>
@@ -95,58 +118,58 @@ function Footer() {
             {/* About Us Column */}
             <Grid item xs={6} sm={3}>
               <StyledTypography variant="h6" gutterBottom>
-                Hakkımızda
+                {t.aboutUs.title}
               </StyledTypography>
               <Box>
-                <FooterLink href="#">Kariyer</FooterLink>
+                <FooterLink href="#">{t.aboutUs.career}</FooterLink>
               </Box>
               <Box>
-                <FooterLink href="#">Blog</FooterLink>
+                <FooterLink href="#">{t.aboutUs.blog}</FooterLink>
               </Box>
               <Box>
-                <FooterLink href="#">Şirket Bilgileri</FooterLink>
+                <FooterLink href="#">{t.aboutUs.companyInfo}</FooterLink>
               </Box>
             </Grid>
 
             {/* Earn Money Column */}
             <Grid item xs={6} sm={3}>
               <StyledTypography variant="h6" gutterBottom>
-                Para Kazanın
+                {t.earnMoney.title}
               </StyledTypography>
               <Box>
-                <FooterLink href="#">Ürünlerinizi Satın</FooterLink>
+                <FooterLink href="#">{t.earnMoney.sellProducts}</FooterLink>
               </Box>
               <Box>
-                <FooterLink href="#">İş Ortağımız Olun</FooterLink>
+                <FooterLink href="#">{t.earnMoney.becomePartner}</FooterLink>
               </Box>
             </Grid>
 
             {/* Payment Column */}
             <Grid item xs={6} sm={3}>
               <StyledTypography variant="h6" gutterBottom>
-                Ödeme
+                {t.payment.title}
               </StyledTypography>
               <Box>
-                <FooterLink href="#">Ödeme Seçenekleri</FooterLink>
+                <FooterLink href="#">{t.payment.paymentOptions}</FooterLink>
               </Box>
               <Box>
-                <FooterLink href="#">Kargo Takibi</FooterLink>
+                <FooterLink href="#">{t.payment.trackShipment}</FooterLink>
               </Box>
             </Grid>
 
             {/* Help Column */}
             <Grid item xs={6} sm={3}>
               <StyledTypography variant="h6" gutterBottom>
-                Yardım
+                {t.help.title}
               </StyledTypography>
               <Box>
-                <FooterLink href="#">COVID-19</FooterLink>
+                <FooterLink href="#">{t.help.covid19}</FooterLink>
               </Box>
               <Box>
-                <FooterLink href="#">Kargo ve Teslimat</FooterLink>
+                <FooterLink href="#">{t.help.shippingDelivery}</FooterLink>
               </Box>
               <Box>
-                <FooterLink href="#">İade ve Değişim</FooterLink>
+                <FooterLink href="#">{t.help.returnsExchange}</FooterLink>
               </Box>
             </Grid>
           </Grid>
@@ -154,11 +177,33 @@ function Footer() {
       </FooterContainer>
 
       <FooterBottom>
-        <Container maxWidth="lg">
-          <Typography variant="body2" align="center" sx={{
-            fontSize: { xs: '0.75rem', sm: '0.875rem' }
-          }}>
-            © {new Date().getFullYear()} Amazing. Tüm hakları saklıdır.
+        <LanguageButton onClick={toggleLanguage}>
+          <FlagIcon 
+            src={language === 'tr' ? '/src/assets/img/flag-tr.png' : '/src/assets/img/flag-en.png'} 
+            alt={language === 'tr' ? 'Türkçe' : 'English'} 
+          />
+          <Typography variant="body2" color="white">
+            {language === 'tr' ? 'Türkçe' : 'English'}
+          </Typography>
+        </LanguageButton>
+        <Container 
+          maxWidth="lg" 
+          sx={{ 
+            display: 'flex', 
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            padding: '16px'
+          }}
+        >
+          <Typography 
+            variant="body2" 
+            sx={{
+              fontSize: { xs: '0.75rem', sm: '0.875rem' },
+              textAlign: 'center'
+            }}
+          >
+            {t.copyright.replace('{year}', new Date().getFullYear())}
           </Typography>
         </Container>
       </FooterBottom>

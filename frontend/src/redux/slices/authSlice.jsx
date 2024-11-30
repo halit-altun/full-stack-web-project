@@ -32,6 +32,14 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { dispatch }) => {
+    authService.logout();
+    dispatch(clearUser());
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -40,10 +48,9 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
     },
-    logout: (state) => {
+    clearUser: (state) => {
       state.user = null;
       state.isAuthenticated = false;
-      localStorage.removeItem('user');
     }
   },
   extraReducers: (builder) => {
@@ -64,5 +71,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { logout, setUser } = authSlice.actions;
+export const { clearUser, setUser } = authSlice.actions;
 export default authSlice.reducer;

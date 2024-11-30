@@ -15,6 +15,7 @@ import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import AuthFooter from '../components/Auth/AuthFooter';
 import AnimatedCheckmark from '../components/Common/AnimatedCheckmark';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -35,6 +36,8 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const { language, translations } = useLanguage();
+  const t = translations[language];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,12 +45,12 @@ const ResetPassword = () => {
     setPasswordError('');
     
     if (password !== confirmPassword) {
-      setPasswordError('Şifreler eşleşmiyor');
+      setPasswordError(t.dashboard.changePassword.passwordMismatch);
       return;
     }
     
     if (password.length < 6) {
-      setPasswordError('Şifre en az 6 karakter olmalıdır');
+      setPasswordError(language === 'tr' ? 'Şifre en az 6 karakter olmalıdır' : 'Password must be at least 6 characters');
       return;
     }
 
@@ -58,20 +61,20 @@ const ResetPassword = () => {
       });
       
       if (response.data?.isSamePassword) {
-        setPasswordError('Yeni şifreniz eski şifrenizle aynı olamaz');
+        setPasswordError(language === 'tr' ? 'Yeni şifreniz eski şifrenizle aynı olamaz' : 'New password cannot be the same as your old password');
         return;
       }
       
       setIsSuccess(true);
       setTimeout(() => {
         navigate('/login');
-      }, 2000);
+      }, 1500);
       
     } catch (error) {
       if (error.response?.data?.message === 'New password cannot be the same as the old password') {
-        setPasswordError('Yeni şifreniz eski şifrenizle aynı olamaz');
+        setPasswordError(language === 'tr' ? 'Yeni şifreniz eski şifrenizle aynı olamaz' : 'New password cannot be the same as your old password');
       } else {
-        toast.error(error.response?.data?.message || 'Şifre sıfırlama başarısız oldu');
+        toast.error(error.response?.data?.message || (language === 'tr' ? 'Şifre sıfırlama başarısız oldu' : 'Password reset failed'));
       }
     } finally {
       setLoading(false);
@@ -115,16 +118,16 @@ const ResetPassword = () => {
             }}>
               <AnimatedCheckmark />
               <Typography variant="h6" align="center" gutterBottom>
-                Şifreniz başarıyla değiştirildi!
+                {language === 'tr' ? 'Şifreniz başarıyla değiştirildi!' : 'Your password has been changed successfully!'}
               </Typography>
               <Typography variant="body2" align="center" color="text.secondary">
-                Giriş sayfasına yönlendiriliyorsunuz...
+                {language === 'tr' ? 'Giriş sayfasına yönlendiriliyorsunuz...' : 'Redirecting to login page...'}
               </Typography>
             </Box>
           ) : (
             <>
               <Typography component="h1" variant="h5" gutterBottom>
-                Şifre Sıfırlama
+                {t.forgotPassword.title}
               </Typography>
               <form onSubmit={handleSubmit}>
                 <TextField
@@ -132,7 +135,7 @@ const ResetPassword = () => {
                   required
                   fullWidth
                   name="password"
-                  label="Yeni Şifre"
+                  label={t.dashboard.changePassword.newPassword}
                   type="password"
                   id="password"
                   value={password}
@@ -145,7 +148,7 @@ const ResetPassword = () => {
                   required
                   fullWidth
                   name="confirmPassword"
-                  label="Şifreyi Tekrar Girin"
+                  label={t.dashboard.changePassword.confirmPassword}
                   type="password"
                   id="confirmPassword"
                   value={confirmPassword}
@@ -181,7 +184,7 @@ const ResetPassword = () => {
                     }
                   }}
                 >
-                  Şifreyi Değiştir
+                  {t.dashboard.changePassword.changeButton}
                 </Button>
               </form>
             </>

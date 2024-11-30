@@ -26,11 +26,11 @@ const sendPasswordResetEmail = async (email, resetToken) => {
     const mailOptions = {
       from: '"Amazing Support" <' + process.env.EMAIL_USER + '>',
       to: email,
-      subject: 'Şifre Sıfırlama İsteği',
+      subject: 'Password Reset Request',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #0F1111; font-size: 24px; margin-bottom: 20px;">Şifre Sıfırlama İsteği</h1>
-          <p style="color: #333; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Şifrenizi sıfırlamak için aşağıdaki butona tıklayın:</p>
+          <h1 style="color: #0F1111; font-size: 24px; margin-bottom: 20px;">Password Reset Request</h1>
+          <p style="color: #333; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Click the button below to reset your password:</p>
           
           <a href="${resetUrl}" 
              style="display: inline-block; 
@@ -44,14 +44,14 @@ const sendPasswordResetEmail = async (email, resetToken) => {
                     border: none;
                     box-shadow: none;
                     margin: 20px 0;">
-            Şifremi Sıfırla
+            Reset Password
           </a>
           
-          <p style="color: #666; font-size: 14px; margin-top: 20px;">Bu link 1 saat süreyle geçerlidir.</p>
-          <p style="color: #666; font-size: 14px;">Eğer bu isteği siz yapmadıysanız, bu e-postayı görmezden gelebilirsiniz.</p>
+          <p style="color: #666; font-size: 14px; margin-top: 20px;">This link is valid for 1 hour.</p>
+          <p style="color: #666; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
           
           <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
-            © ${new Date().getFullYear()} Amazing. Tüm hakları saklıdır.
+            © ${new Date().getFullYear()} Amazing. All rights reserved.
           </div>
         </div>
       `

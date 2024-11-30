@@ -6,6 +6,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useCart } from '../../contexts/CartContext';
 import { useTheme, useMediaQuery } from '@mui/material';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const StyledComponents = {
   CartPopover: styled(Box)(({ theme }) => ({
@@ -94,6 +95,26 @@ const CartSummary = ({ onClose }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { cartItems, getCartCount, getCartTotal, updateQuantity, removeFromCart } = useCart();
   const cartCount = getCartCount();
+  const { language } = useLanguage();
+
+  const translations = {
+    tr: {
+      emptyCart: 'Sepetiniz boş',
+      startShopping: 'Alışverişe Başla',
+      shoppingCart: 'Alışveriş Sepeti',
+      subtotal: 'Ara Toplam',
+      products: 'ürün',
+      goToCart: 'Sepete Git'
+    },
+    en: {
+      emptyCart: 'Your cart is empty',
+      startShopping: 'Start Shopping',
+      shoppingCart: 'Shopping Cart',
+      subtotal: 'Subtotal',
+      products: 'items',
+      goToCart: 'Go to Cart'
+    }
+  };
 
   const handleQuantityChange = (itemId, change) => {
     const item = cartItems.find(i => i._id === itemId);
@@ -126,7 +147,7 @@ const CartSummary = ({ onClose }) => {
         {cartCount === 0 ? (
           <div className="empty-cart-message">
             <Typography variant="body1" gutterBottom sx={{ color: '#000' }}>
-              Sepetiniz boş
+              {translations[language].emptyCart}
             </Typography>
             <Button
               variant="contained"
@@ -135,12 +156,11 @@ const CartSummary = ({ onClose }) => {
               to="/"
               onClick={onClose}
             >
-              Alışverişe Başla
+              {translations[language].startShopping}
             </Button>
           </div>
         ) : (
           <div>
-            {/* Cart content */}
             <Typography variant="h6" gutterBottom sx={{ 
               fontSize: '16px', 
               fontWeight: 700,
@@ -148,10 +168,9 @@ const CartSummary = ({ onClose }) => {
               borderBottom: '1px solid #DDD',
               pb: 1
             }}>
-              Alışveriş Sepeti
+              {translations[language].shoppingCart}
             </Typography>
             
-            {/* Cart items */}
             <Box sx={{ 
               maxHeight: 350, 
               overflowY: 'auto', 
@@ -261,7 +280,6 @@ const CartSummary = ({ onClose }) => {
               ))}
             </Box>
             
-            {/* Cart summary */}
             <Divider />
             <Box sx={{ 
               mt: 2, 
@@ -275,7 +293,7 @@ const CartSummary = ({ onClose }) => {
                 fontWeight: 700,
                 color: '#0F1111'
               }}>
-                Ara Toplam ({cartCount} ürün):
+                {translations[language].subtotal} ({cartCount} {translations[language].products}):
               </Typography>
               <Typography variant="body1" sx={{ 
                 fontSize: '18px',
@@ -286,7 +304,6 @@ const CartSummary = ({ onClose }) => {
               </Typography>
             </Box>
             
-            {/* Cart button */}
             <Button
               variant="contained"
               className="cart-button"
@@ -307,7 +324,7 @@ const CartSummary = ({ onClose }) => {
                 boxShadow: 'none',
               }}
             >
-              Sepete Git
+              {translations[language].goToCart}
             </Button>
           </div>
         )}

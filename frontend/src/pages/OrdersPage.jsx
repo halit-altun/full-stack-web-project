@@ -4,7 +4,6 @@ import {
   Container, 
   Typography, 
   Divider, 
-  CircularProgress,
   Grid,
   Card,
   CardContent,
@@ -17,6 +16,7 @@ import { useCart } from '../contexts/CartContext';
 import { toast } from 'react-hot-toast';
 import api from '../services/api';
 import StyledButton from '../components/Common/StyledButton';
+import { useLanguage, translations } from '../contexts/LanguageContext';
 
 const PageContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -52,6 +52,8 @@ const PaginationContainer = styled(Box)(({ theme }) => ({
 const OrderCard = ({ order }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language].dashboard.orders;
 
   const handleBuyAgain = (product) => {
     addToCart({
@@ -61,24 +63,23 @@ const OrderCard = ({ order }) => {
       image: product.image
     }, 1);
     
-    toast.success('Ürün sepete eklendi');
+    toast.success(translations[language].cart.addedToCart);
     navigate('/cart');
   };
 
   const addressDisplay = order.deliveryAddress ? (
-    <>
+    <Box sx={{ mt: 2 }}>
+      <Typography variant="subtitle2" gutterBottom>
+        {t.deliveryAddress}:
+      </Typography>
       <Typography variant="body2" color="text.secondary">
         {order.deliveryAddress.fullAddress}
       </Typography>
       <Typography variant="body2" color="text.secondary">
         {`${order.deliveryAddress.district}, ${order.deliveryAddress.city}`}
       </Typography>
-    </>
-  ) : (
-    <Typography variant="body2" color="text.secondary">
-      Teslimat adresi bulunamadı
-    </Typography>
-  );
+    </Box>
+  ) : null;
 
   return (
     <Card sx={{ 
@@ -101,23 +102,15 @@ const OrderCard = ({ order }) => {
       }}>
         <Box>
           <Typography variant="caption" color="text.secondary">
-            SİPARİŞ TARİHİ
-          </Typography>
-          <Typography variant="body2">
-            {new Date(order.createdAt).toLocaleDateString('tr-TR')}
-          </Typography>
-        </Box>
-        <Box>
-          <Typography variant="caption" color="text.secondary">
-            TOPLAM
+            {t.totalAmount}
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-            ₺{order.totalAmount}
+            {language === 'tr' ? '₺' : '$'}{order.totalAmount}
           </Typography>
         </Box>
         <Box>
           <Typography variant="caption" color="text.secondary">
-            SİPARİŞ NO
+            {t.orderNumber}
           </Typography>
           <Typography variant="body2">
             #{order._id}
@@ -126,91 +119,79 @@ const OrderCard = ({ order }) => {
       </Box>
 
       <CardContent sx={{ bgcolor: 'white' }}>
-        {/* Product List */}
-        <Box sx={{ mt: 1 }}>
-          {order.products.map((item) => (
-            <Box 
-              key={item.product._id}
-              sx={{ 
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                mb: 2,
-                pb: 2,
-                borderBottom: '1px solid #eee',
-                '&:last-child': {
-                  borderBottom: 'none',
-                  pb: 0,
-                  mb: 0
-                }
-              }}
-            >
-              <Link to={`/product/${item.product._id}`}>
-                <Box
-                  component="img"
-                  src={item.product.image}
-                  alt={item.product.title}
+        {order.products.map((item) => (
+          <Box 
+            key={item.product._id}
+            sx={{ 
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              mb: 2,
+              pb: 2,
+              borderBottom: '1px solid #eee',
+              '&:last-child': {
+                borderBottom: 'none',
+                pb: 0,
+                mb: 0
+              }
+            }}
+          >
+            <Link to={`/product/${item.product._id}`}>
+              <Box
+                component="img"
+                src={item.product.image}
+                alt={item.product.title}
+                sx={{
+                  width: 100,
+                  height: 100,
+                  objectFit: 'contain',
+                  borderRadius: 1
+                }}
+              />
+            </Link>
+            <Box sx={{ flex: 1 }}>
+              <Link 
+                to={`/product/${item.product._id}`}
+                style={{ 
+                  textDecoration: 'none', 
+                  color: 'inherit'
+                }}
+              >
+                <Typography 
+                  variant="subtitle1"
                   sx={{
-                    width: 100,
-                    height: 100,
-                    objectFit: 'contain',
-                    borderRadius: 1,
-                    transition: 'transform 0.2s',
+                    fontWeight: 500,
                     '&:hover': {
-                      transform: 'scale(1.05)'
+                      color: '#C7511F',
+                      textDecoration: 'none'
                     }
                   }}
-                />
+                >
+                  {item.product.title}
+                </Typography>
               </Link>
-              
-              <Box sx={{ flex: 1 }}>
-                <Link 
-                  to={`/product/${item.product._id}`}
-                  style={{ 
-                    textDecoration: 'none', 
-                    color: 'inherit'
-                  }}
-                >
-                  <Typography 
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: 500,
-                      '&:hover': {
-                        color: '#C7511F',
-                        textDecoration: 'none'
-                      }
-                    }}
-                  >
-                    {item.product.title}
-                  </Typography>
-                </Link>
-                <Typography variant="body2" color="text.secondary">
-                  Adet: {item.quantity}
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#B12704', fontWeight: 500 }}>
-                  ₺{item.product.price}
-                </Typography>
-                <StyledButton
-                  variant="outlined"
-                  size="small"
-                  onClick={() => handleBuyAgain(item.product)}
-                  className="outlined"
-                  sx={{ mt: 1 }}
-                >
-                  Ürünü Tekrar Al
-                </StyledButton>
-              </Box>
+              <Typography variant="body2" color="text.secondary">
+                Adet: {item.quantity}
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#B12704', fontWeight: 500 }}>
+                ₺{item.product.price}
+              </Typography>
+              <StyledButton
+                variant="outlined"
+                size="small"
+                onClick={() => handleBuyAgain(item.product)}
+                className="outlined"
+                sx={{ mt: 1 }}
+              >
+                {t.buyAgain}
+              </StyledButton>
             </Box>
-          ))}
-        </Box>
+          </Box>
+        ))}
 
         <Divider sx={{ my: 2 }} />
 
-        {/* Delivery Address */}
         <Box sx={{ mt: 2 }}>
-          <Typography variant="subtitle2" gutterBottom>
-            Teslimat Adresi:
-          </Typography>
           {addressDisplay}
         </Box>
       </CardContent>
@@ -218,7 +199,7 @@ const OrderCard = ({ order }) => {
   );
 };
 
-// Add wave animation keyframes
+// wave animation keyframes
 const waveAnimation = keyframes`
   0% {
     transform: translateX(-100%);
@@ -231,124 +212,17 @@ const waveAnimation = keyframes`
   }
 `;
 
-// Add loading skeleton component
-const OrderSkeleton = () => (
-  <Box sx={{ mb: 2 }}>
-    <Card>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-          <Skeleton 
-            variant="rectangular" 
-            width={120} 
-            height={24} 
-            sx={{
-              bgcolor: '#f0f0f0',
-              position: 'relative',
-              overflow: 'hidden',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                animation: `${waveAnimation} 1.5s infinite`,
-              }
-            }}
-          />
-          <Skeleton 
-            variant="rectangular" 
-            width={100} 
-            height={24}
-            sx={{
-              bgcolor: '#f0f0f0',
-              position: 'relative',
-              overflow: 'hidden',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                animation: `${waveAnimation} 1.5s infinite`,
-              }
-            }}
-          />
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          {[1, 2].map((item) => (
-            <Box key={item} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <Skeleton 
-                variant="rectangular" 
-                width={60} 
-                height={60} 
-                sx={{ 
-                  mr: 2,
-                  bgcolor: '#f0f0f0',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                    animation: `${waveAnimation} 1.5s infinite`,
-                  }
-                }}
-              />
-              <Box sx={{ flex: 1 }}>
-                <Skeleton 
-                  variant="text" 
-                  width="80%" 
-                  sx={{
-                    bgcolor: '#f0f0f0',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                      animation: `${waveAnimation} 1.5s infinite`,
-                    }
-                  }}
-                />
-                <Skeleton 
-                  variant="text" 
-                  width="40%" 
-                  sx={{
-                    bgcolor: '#f0f0f0',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                      animation: `${waveAnimation} 1.5s infinite`,
-                    }
-                  }}
-                />
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      </CardContent>
-    </Card>
-  </Box>
-);
+// loading skeleton container
+const LoadingContainer = styled(Box)(({ theme }) => ({
+  width: '100%',
+  '& .MuiSkeleton-root': {
+    transform: 'scale(1, 0.8)',
+    '&::after': {
+      animation: `${waveAnimation} 1.6s linear 0.5s infinite`,
+      background: `linear-gradient(90deg, transparent, ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.6)'}, transparent)`,
+    }
+  }
+}));
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -356,6 +230,8 @@ const OrdersPage = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
+  const { language } = useLanguage();
+  const t = translations[language].dashboard.orders;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -372,6 +248,7 @@ const OrdersPage = () => {
       }
     };
 
+    window.scrollTo(0, 0);
     fetchOrders();
   }, []);
 
@@ -392,148 +269,152 @@ const OrdersPage = () => {
   return (
     <PageContainer>
       <StyledContainer>
-        {loading ? (
-          <>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: 3 }}>
-              <Skeleton 
-                variant="rectangular" 
-                width={150} 
-                height={32}
-                sx={{
-                  bgcolor: '#f0f0f0',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                    animation: `${waveAnimation} 1.5s infinite`,
-                  }
-                }}
-              />
-            </Box>
-            {[1, 2, 3].map((item) => (
-              <OrderSkeleton key={item} />
-            ))}
-          </>
-        ) : error ? (
-          <Box sx={{ textAlign: 'center', py: 4 }}>
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              {error}
-            </Typography>
-            <StyledButton
-              component={Link}
-              to="/"
-              variant="contained"
-              sx={{ mt: 2 }}
-            >
-              Anasayfaya Dön
-            </StyledButton>
-          </Box>
-        ) : (
-          <>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: 3 }}>
-              <Typography variant="h5" sx={{ color: '#0F1111' }}>
-                Siparişlerim
+        <Box sx={{ mb: 4 }}>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            gutterBottom
+            sx={{ color: '#0F1111' }}
+          >
+            {t.title}
+          </Typography>
+
+          {loading ? (
+            <LoadingContainer>
+              {[...Array(3)].map((_, index) => (
+                <Card key={index} sx={{ mb: 2, p: 2 }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                      <Skeleton variant="rectangular" height={120} animation="wave" />
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="60%" height={30} animation="wave" />
+                        <Skeleton variant="text" width="40%" animation="wave" />
+                        <Skeleton variant="text" width="30%" animation="wave" />
+                        <Skeleton variant="text" width="20%" animation="wave" />
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Card>
+              ))}
+            </LoadingContainer>
+          ) : error ? (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography color="error">
+                {t.error}
               </Typography>
-              {orders.length > 0 && (
-                <Typography variant="body2" sx={{ color: '#565959' }}>
-                  {orders.length} sipariş | Gösterilen: {indexOfFirstOrder + 1}-{Math.min(indexOfLastOrder, orders.length)}
-                </Typography>
-              )}
             </Box>
+          ) : orders.length === 0 ? (
+            <Box sx={{ 
+              textAlign: 'center', 
+              py: 8,
+              backgroundColor: '#fff',
+              borderRadius: 1,
+              boxShadow: 1
+            }}>
+              <Typography variant="h6" color="text.secondary">
+                {t.noOrders}
+              </Typography>
+              <StyledButton
+                component={Link}
+                to="/"
+                variant="contained"
+                sx={{ mt: 2 }}
+              >
+                {t.startShopping}
+              </StyledButton>
+            </Box>
+          ) : (
+            <>
+              {orders.length === 0 ? (
+                <Box sx={{ textAlign: 'center', py: 4 }}>
+                  <Typography variant="h6" color="text.secondary" gutterBottom>
+                    Henüz siparişiniz bulunmuyor
+                  </Typography>
+                  <StyledButton
+                    component={Link}
+                    to="/"
+                    variant="contained"
+                    sx={{ mt: 2 }}
+                  >
+                    Alışverişe Başla
+                  </StyledButton>
+                </Box>
+              ) : (
+                <>
+                  {currentOrders.map((order) => (
+                    <OrderCard key={order._id} order={order} />
+                  ))}
 
-            {orders.length === 0 ? (
-              <Box sx={{ textAlign: 'center', py: 4 }}>
-                <Typography variant="h6" color="text.secondary" gutterBottom>
-                  Henüz siparişiniz bulunmuyor
-                </Typography>
-                <StyledButton
-                  component={Link}
-                  to="/"
-                  variant="contained"
-                  sx={{ mt: 2 }}
-                >
-                  Alışverişe Başla
-                </StyledButton>
-              </Box>
-            ) : (
-              <>
-                {currentOrders.map((order) => (
-                  <OrderCard key={order._id} order={order} />
-                ))}
-
-                {/* Pagination Buttons */}
-                {totalPages > 1 && (
-                  <PaginationContainer>
-                    <Stack 
-                      direction="row" 
-                      spacing={1} 
-                      justifyContent="center" 
-                      mt={4}
-                    >
-                      <StyledButton
-                        variant="outlined"
-                        className="outlined"
-                        onClick={() => handlePageChange(1)}
-                        disabled={currentPage === 1}
-                        size="small"
-                        sx={{ minWidth: 'auto', px: 1 }}
+                  {/* Pagination Buttons */}
+                  {totalPages > 1 && (
+                    <PaginationContainer>
+                      <Stack 
+                        direction="row" 
+                        spacing={1} 
+                        justifyContent="center" 
+                        mt={4}
                       >
-                        İlk Sayfa
-                      </StyledButton>
+                        <StyledButton
+                          variant="outlined"
+                          className="outlined"
+                          onClick={() => handlePageChange(1)}
+                          disabled={currentPage === 1}
+                          size="small"
+                          sx={{ minWidth: 'auto', px: 1 }}
+                        >
+                          {t.firstPage}
+                        </StyledButton>
 
-                      <StyledButton
-                        variant="outlined"
-                        className="outlined"
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        size="small"
-                        sx={{ minWidth: 'auto', px: 1 }}
-                      >
-                        Önceki Sayfa
-                      </StyledButton>
-                      
-                      <Box sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center',
-                        px: 1,
-                        color: '#0F1111',
-                        fontSize: '0.875rem'
-                      }}>
-                        Sayfa {currentPage} / {totalPages}
-                      </Box>
+                        <StyledButton
+                          variant="outlined"
+                          className="outlined"
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          size="small"
+                          sx={{ minWidth: 'auto', px: 1 }}
+                        >
+                          {t.previousPage}
+                        </StyledButton>
+                        
+                        <Box sx={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          px: 1,
+                          color: '#0F1111',
+                          fontSize: '0.875rem'
+                        }}>
+                          {t.pageInfo.replace('{current}', currentPage).replace('{total}', totalPages)}
+                        </Box>
 
-                      <StyledButton
-                        variant="outlined"
-                        className="outlined"
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        size="small"
-                        sx={{ minWidth: 'auto', px: 1 }}
-                      >
-                        Sonraki Sayfa
-                      </StyledButton>
+                        <StyledButton
+                          variant="outlined"
+                          className="outlined"
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          size="small"
+                          sx={{ minWidth: 'auto', px: 1 }}
+                        >
+                          {t.nextPage}
+                        </StyledButton>
 
-                      <StyledButton
-                        variant="outlined"
-                        className="outlined"
-                        onClick={() => handlePageChange(totalPages)}
-                        disabled={currentPage === totalPages}
-                      >
-                        Son Sayfa
-                      </StyledButton>
-                    </Stack>
-                  </PaginationContainer>
-                )}
-              </>
-            )}
-          </>
-        )}
+                        <StyledButton
+                          variant="outlined"
+                          className="outlined"
+                          onClick={() => handlePageChange(totalPages)}
+                          disabled={currentPage === totalPages}
+                        >
+                          {t.lastPage}
+                        </StyledButton>
+                      </Stack>
+                    </PaginationContainer>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </Box>
       </StyledContainer>
     </PageContainer>
   );

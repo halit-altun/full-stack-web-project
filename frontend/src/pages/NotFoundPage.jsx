@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import StyledButton from '../components/Common/StyledButton';
 import AuthFooter from '../components/Auth/AuthFooter';
 import { useTheme, useMediaQuery } from '@mui/material';
+import { useLanguage, translations } from '../contexts/LanguageContext';
 
 const NotFoundContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -18,6 +19,8 @@ const NotFoundContainer = styled(Box)(({ theme }) => ({
 const NotFoundPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { language } = useLanguage();
+  const t = translations[language].notFound;
 
   return (
     <Box sx={{ 
@@ -30,10 +33,10 @@ const NotFoundPage = () => {
           404
         </Typography>
         <Typography variant="h4" sx={{ mb: 3 }}>
-          Sayfa Bulunamadı
+          {t.title}
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          Aradığınız sayfa mevcut değil veya kaldırılmış olabilir.
+          {t.description}
         </Typography>
         <StyledButton
           component={Link}
@@ -41,7 +44,7 @@ const NotFoundPage = () => {
           variant="contained"
           sx={{ minWidth: '200px' }}
         >
-          Ana Sayfaya Dön
+          {t.backToHome}
         </StyledButton>
       </NotFoundContainer>
       <AuthFooter isMobile={isMobile} />

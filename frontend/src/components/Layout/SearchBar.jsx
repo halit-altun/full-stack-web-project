@@ -8,6 +8,8 @@ import {
   Select,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { translations } from '../../contexts/LanguageContext';
 
 // Styled Components
 const SearchBar = styled('div')(({ theme }) => ({
@@ -72,10 +74,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const SearchBarComponent = ({ categories, isMobile }) => {
+const SearchBarComponent = ({ categories = [], isMobile }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('all');
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  const categoryMapping = {
+    'Elektronik': 'electronics',
+    'Ev & Yaşam': 'homeAndLiving',
+    'Moda': 'fashion',
+    'Mutfak': 'kitchen',
+    'Oyun & Hobi': 'gamesAndHobbies'
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -123,15 +135,15 @@ const SearchBarComponent = ({ categories, isMobile }) => {
         disableUnderline
         MenuProps={menuProps}
       >
-        <MenuItem value="all">Tüm Kategoriler</MenuItem>
+        <MenuItem value="all">{t.categories.all}</MenuItem>
         {categories.map((category) => (
           <MenuItem key={category} value={category}>
-            {category}
+            {t.categories[categoryMapping[category]]}
           </MenuItem>
         ))}
       </CategorySelect>
       <StyledInputBase
-        placeholder="Amazing'de Ara"
+        placeholder={t.placeholder}
         inputProps={{ 
           'aria-label': 'search',
           onKeyPress: (e) => {

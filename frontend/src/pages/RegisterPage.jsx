@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Container, 
@@ -19,6 +19,8 @@ import api from '../services/api';
 import AuthFooter from '../components/Auth/AuthFooter';
 import StyledButton from '../components/Common/StyledButton';
 import AnimatedCheckmark from '../components/Common/AnimatedCheckmark';
+import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -81,6 +83,15 @@ const Register = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isAuthenticated } = useAuth();
+  const { language, translations } = useLanguage();
+  const t = translations[language].register;
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,13 +127,13 @@ const Register = () => {
     setErrors({});
     
     const newErrors = {};
-    if (!formData.firstName) newErrors.firstName = 'Ad alanı zorunludur';
-    if (!formData.lastName) newErrors.lastName = 'Soyad alanı zorunludur';
-    if (!formData.email) newErrors.email = 'Email alanı zorunludur';
-    if (!formData.phone.number) newErrors.phone = 'Telefon numarası zorunludur';
-    if (!formData.password) newErrors.password = 'Şifre alanı zorunludur';
+    if (!formData.firstName) newErrors.firstName = t.validation.firstNameRequired;
+    if (!formData.lastName) newErrors.lastName = t.validation.lastNameRequired;
+    if (!formData.email) newErrors.email = t.validation.emailRequired;
+    if (!formData.phone.number) newErrors.phone = t.validation.phoneRequired;
+    if (!formData.password) newErrors.password = t.validation.passwordRequired;
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Şifreler eşleşmiyor';
+      newErrors.confirmPassword = t.validation.passwordMismatch;
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -132,29 +143,30 @@ const Register = () => {
     }
 
     try {
-      const response = await api.post('/api/users/register', formData);
+      await api.post('/api/users/register', formData);
       setIsSubmitted(true);
-      toast.success('Hesabınız başarıyla oluşturuldu!');
+      toast.success(t.success);
       
       setTimeout(() => {
         navigate('/login');
       }, 2000);
     } catch (error) {
-      if (error.response?.data?.message === 'Bu e-posta adresi zaten kullanılmaktadır') {
+      const errorMessage = error.response?.data?.message;
+      
+      if (errorMessage === 'This email address is already in use') {
         setErrors(prev => ({
           ...prev,
-          email: 'Bu e-posta adresi zaten kullanılmaktadır'
+          email: t.emailExists
         }));
-        toast.error('Bu e-posta adresi zaten kullanılmaktadır');
-      } else if (error.response?.data?.message === 'Bu telefon numarası zaten kullanılmaktadır') {
+        toast.error(t.emailExists);
+      } else if (errorMessage === 'This phone number is already in use') {
         setErrors(prev => ({
           ...prev,
-          phone: 'Bu telefon numarası zaten kullanılmaktadır'
+          phone: t.phoneExists
         }));
-        toast.error('Bu telefon numarası zaten kullanılmaktadır');
+        toast.error(t.phoneExists);
       } else {
-        const errorMessage = error.response?.data?.message || 'Kayıt işlemi başarısız oldu';
-        toast.error(errorMessage);
+        toast.error(error.response?.data?.message || t.registerError);
         if (error.response?.data?.errors) {
           setErrors(error.response.data.errors);
         }
@@ -187,21 +199,36 @@ const Register = () => {
         }}
       >
         <FormContainer>
-          {!isSubmitted ? (
+          {isSubmitted ? (
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              py: 2 
+            }}>
+              <AnimatedCheckmark />
+              <Typography variant="h6" align="center" gutterBottom>
+                {t.success}
+              </Typography>
+              <Typography variant="body2" align="center" color="text.secondary">
+                {t.redirecting}
+              </Typography>
+            </Box>
+          ) : (
             <>
               <Typography 
                 component="h1" 
                 variant={isMobile ? "h6" : "h5"} 
                 sx={{ mb: { xs: 2, sm: 3 } }}
               >
-                Hesap Oluştur
+                {t.title}
               </Typography>
               <form onSubmit={handleSubmit}>
                 <TextField
                   fullWidth
                   margin="normal"
                   name="firstName"
-                  label="Ad"
+                  label={t.firstName}
                   value={formData.firstName}
                   onChange={handleChange}
                   required
@@ -213,7 +240,7 @@ const Register = () => {
                   fullWidth
                   margin="normal"
                   name="lastName"
-                  label="Soyad"
+                  label={t.lastName}
                   value={formData.lastName}
                   onChange={handleChange}
                   required
@@ -225,7 +252,7 @@ const Register = () => {
                   fullWidth
                   margin="normal"
                   name="email"
-                  label="E-posta"
+                  label={t.email}
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -237,7 +264,7 @@ const Register = () => {
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                   <TextField
                     name="countryCode"
-                    label="Ülke Kodu"
+                    label={t.countryCode}
                     value={formData.phone.countryCode}
                     onChange={handleChange}
                     error={!!errors.phone}
@@ -249,7 +276,7 @@ const Register = () => {
                   />
                   <TextField
                     name="phoneNumber"
-                    label="Telefon Numarası"
+                    label={t.phone}
                     value={formData.phone.number}
                     onChange={handleChange}
                     error={!!errors.phone}
@@ -268,7 +295,7 @@ const Register = () => {
                   fullWidth
                   margin="normal"
                   name="password"
-                  label="Şifre"
+                  label={t.password}
                   type="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -281,7 +308,7 @@ const Register = () => {
                   fullWidth
                   margin="normal"
                   name="confirmPassword"
-                  label="Şifreyi Tekrar Girin"
+                  label={t.confirmPassword}
                   type="password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
@@ -297,7 +324,7 @@ const Register = () => {
                   disabled={loading}
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  {loading ? <CircularProgress size={24} /> : "Kaydol"}
+                  {loading ? <CircularProgress size={24} /> : t.registerButton}
                 </StyledButton>
               </form>
               <Box sx={{ mt: 2, textAlign: 'center' }}>
@@ -307,25 +334,10 @@ const Register = () => {
                   variant="body2"
                   underline="hover"
                 >
-                  Zaten bir hesabınız var mı? Giriş yapın
+                  {t.alreadyHaveAccount}
                 </Link>
               </Box>
             </>
-          ) : (
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              py: 2 
-            }}>
-              <AnimatedCheckmark />
-              <Typography variant="h6" align="center" gutterBottom>
-                Hesabınız başarıyla oluşturuldu!
-              </Typography>
-              <Typography variant="body2" align="center" color="text.secondary">
-                Giriş sayfasına yönlendiriliyorsunuz...
-              </Typography>
-            </Box>
           )}
         </FormContainer>
       </Box>
