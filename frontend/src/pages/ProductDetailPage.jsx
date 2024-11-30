@@ -251,6 +251,7 @@ const ProductDetail = () => {
     };
 
     fetchProduct();
+    window.scrollTo(0, 0);
   }, [id]);
 
   const handlePostalCodeChange = (event) => {
