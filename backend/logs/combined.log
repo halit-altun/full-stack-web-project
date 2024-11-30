@@ -4565,3 +4565,4 @@
 {"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-30 18:42:25","userId":"674b2dd7171f00a30cc356ce"}
 {"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-11-30 18:42:25","userId":"674b2dd7171f00a30cc356ce"}
 {"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-11-30 18:42:25","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Server 5000 portunda çalışıyor","service":"e-commerce-api","timestamp":"2024-11-30 20:50:28"}
