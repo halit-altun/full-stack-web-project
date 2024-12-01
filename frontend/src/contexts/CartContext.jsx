@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item._id === product._id);
       
-      if (existingItem) {
+      if (existingItem) { 
         const newQuantity = existingItem.quantity + quantity;
         if (product.count && newQuantity > product.count) {
           toast.error(`Bu üründen en fazla ${product.count} adet ekleyebilirsiniz`);

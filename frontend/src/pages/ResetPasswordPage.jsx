@@ -184,7 +184,7 @@ const ResetPassword = () => {
                     }
                   }}
                 >
-                  {t.dashboard.changePassword.changeButton}
+                  {t.dashboard.changePassword.changeButton} 
                 </Button>
               </form>
             </>

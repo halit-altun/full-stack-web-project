@@ -193,7 +193,7 @@ const HomePage = () => {
           ) : (
             currentProducts.map((product) => (
               <ProductCard key={product._id} product={product} />
-            ))
+            )) 
           )}
         </StyledProductsContainer>
       </StyledContainer>

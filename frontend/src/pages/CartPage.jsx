@@ -374,7 +374,7 @@ const CartPage = () => {
           <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
             <StyledButton
               onClick={handleConfirmCheckout}
-              variant="contained"
+              variant="contained" 
               autoFocus
             >
               Tamam

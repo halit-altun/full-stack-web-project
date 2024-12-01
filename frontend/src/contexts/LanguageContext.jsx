@@ -43,7 +43,7 @@ export const translations = {
       addresses: {
         title: 'Adreslerim',
         description: 'Kayıtlı adreslerinizi yönetin'
-      },
+      }, 
       security: {
         title: 'Güvenlik',
         description: 'Şifrenizi değiştirin ve güvenlik ayarlarınızı yönetin'

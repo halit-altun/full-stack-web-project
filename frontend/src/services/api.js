@@ -23,7 +23,7 @@ api.interceptors.request.use(
     // Get CSRF token from cookie and retry
     let retries = 0;
     const maxRetries = 2;
-
+ 
     while (retries < maxRetries) {
       const csrfToken = document.cookie
         .split('; ')

@@ -18,7 +18,7 @@ export const AddressProvider = ({ children }) => {
   return (
     <AddressContext.Provider value={{
       addresses,
-      setAddresses,
+      setAddresses, 
       addAddress,
       deleteAddress
     }}>

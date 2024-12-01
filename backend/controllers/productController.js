@@ -62,7 +62,7 @@ const createProduct = async (req, res) => {
     res.status(400).json({
       message: 'Ürün eklenirken bir hata oluştu',
       error: error.message
-    });
+    }); 
   }
 };
 

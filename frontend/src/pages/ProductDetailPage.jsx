@@ -248,7 +248,7 @@ const ProductDetail = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }; 
 
     fetchProduct();
     window.scrollTo(0, 0);

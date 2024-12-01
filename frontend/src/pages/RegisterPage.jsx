@@ -343,7 +343,7 @@ const Register = () => {
       </Box>
       <AuthFooter isMobile={isMobile} />
     </Container>
-  );
+  ); 
 };
 
 export default Register;

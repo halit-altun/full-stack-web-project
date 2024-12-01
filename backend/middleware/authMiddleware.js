@@ -13,7 +13,7 @@ const protect = async (req, res, next) => {
     if (!token) {
       logger.warn('Authentication failed: No token provided', {
         path: req.path,
-        method: req.method
+        method: req.method 
       });
       return res.status(401).json({ message: 'Yetkilendirme başarısız' });
     }

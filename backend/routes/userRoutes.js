@@ -13,3 +13,4 @@ router.post('/forgot-password', forgotPassword);
 router.post('/check-email', checkEmail);
 
 module.exports = router;
+ 

@@ -62,7 +62,7 @@ const sendPasswordResetEmail = async (email, resetToken) => {
     
     return true;
   } catch (error) {
-    logger.error('Email sending failed:', {
+    logger.error('Email sending failed:', { 
       error: error.message,
       stack: error.stack,
       email

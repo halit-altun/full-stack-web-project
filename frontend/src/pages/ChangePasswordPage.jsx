@@ -163,7 +163,7 @@ const ChangePasswordPage = () => {
                 {t.loginAgain}
               </Typography>
             </Box>
-          )}
+          )} 
         </Paper>
       </Box>
       <AuthFooter isMobile={isMobile} />

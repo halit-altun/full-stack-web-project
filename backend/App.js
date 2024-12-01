@@ -16,7 +16,7 @@ const app = express();
 // CORS settings - Updated for CSRF
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true,
+  credentials: true, 
   exposedHeaders: ['XSRF-TOKEN']
 }));
 

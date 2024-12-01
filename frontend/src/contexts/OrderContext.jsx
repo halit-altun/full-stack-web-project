@@ -21,7 +21,7 @@ export const OrderProvider = ({ children }) => {
           district: deliveryAddress.district,
           postalCode: deliveryAddress.postalCode
         },
-        totalAmount: total
+        totalAmount: total 
       };
       
       const response = await orderService.createOrder(orderData);

@@ -329,6 +329,6 @@ const Login = () => {
       <AuthFooter isMobile={isMobile} />
     </Container>
   );
-};
+}; 
 
 export default Login;

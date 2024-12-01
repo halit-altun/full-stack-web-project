@@ -4632,3 +4632,14 @@
 {"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-11-30 21:07:24","userId":"674b2dd7171f00a30cc356ce"}
 {"level":"info","message":"Password reset email sent to halitkhalil@gmail.com","messageId":"<927cfbfb-879c-1529-eab8-c2d93cfef330@gmail.com>","service":"e-commerce-api","timestamp":"2024-11-30 21:08:00"}
 {"email":"halitkhalil@gmail.com","level":"info","message":"Password reset email sent successfully","service":"e-commerce-api","timestamp":"2024-11-30 21:08:00"}
+{"level":"info","message":"Server 5000 portunda çalışıyor","service":"e-commerce-api","timestamp":"2024-12-01 09:06:52"}
+{"level":"warn","message":"Authentication failed: No token provided","method":"GET","path":"/","service":"e-commerce-api","timestamp":"2024-12-01 09:07:05"}
+{"level":"warn","message":"Authentication failed: No token provided","method":"GET","path":"/","service":"e-commerce-api","timestamp":"2024-12-01 09:07:05"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-12-01 09:07:22","userId":"674b2dd7171f00a30cc356ce"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-12-01 09:07:22","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-12-01 09:07:22","userId":"674b2dd7171f00a30cc356ce"}
+{"count":1,"level":"info","message":"Addresses fetched successfully","service":"e-commerce-api","timestamp":"2024-12-01 09:07:22","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Authentication successful","path":"/","service":"e-commerce-api","timestamp":"2024-12-01 09:07:29","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Order created successfully","orderId":"674bfd21714eb4a0e53917cd","service":"e-commerce-api","timestamp":"2024-12-01 09:07:29","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-12-01 09:07:30","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-12-01 09:07:30","userId":"674b2dd7171f00a30cc356ce"}

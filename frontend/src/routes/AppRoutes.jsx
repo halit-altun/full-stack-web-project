@@ -21,7 +21,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 const AppRoutes = () => {
   const location = useLocation();
   const hideNavbarAndFooter = [
-    '/login', 
+    '/login',  
     '/register', 
     '/forgot-password',
     '/account/change-password',

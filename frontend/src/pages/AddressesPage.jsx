@@ -341,7 +341,7 @@ const AddressesPage = () => {
         editAddress={editingAddress}
       />
     </PageContainer>
-  );
+  ); 
 };
 
 export default AddressesPage; 

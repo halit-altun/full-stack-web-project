@@ -10,3 +10,4 @@ router.get('/:id', getProductById);
 router.post('/', protect, isAdmin, createProduct);
 
 module.exports = router;
+ 

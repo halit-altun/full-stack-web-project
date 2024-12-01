@@ -30,7 +30,7 @@ const NotFoundPage = () => {
     }}>
       <NotFoundContainer>
         <Typography variant="h1" sx={{ mb: 2, fontSize: { xs: '4rem', sm: '6rem' } }}>
-          404
+          404 
         </Typography>
         <Typography variant="h4" sx={{ mb: 3 }}>
           {t.title}

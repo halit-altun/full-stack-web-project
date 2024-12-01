@@ -172,6 +172,6 @@ const ForgotPassword = () => {
       <AuthFooter isMobile={isMobile} />
     </Container>
   );
-};
+}; 
 
 export default ForgotPassword; 
