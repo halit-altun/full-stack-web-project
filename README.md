@@ -3,20 +3,21 @@
 A full-stack e-commerce platform built with React, Node.js, Express, and MongoDB. Features include user authentication, product management, shopping cart functionality, order processing, and address management.
 
 Screenshot
-![Ekran görüntüsü 2024-11-28 182358](https://github.com/user-attachments/assets/9d114ebe-ff23-467e-a180-4f8acf165465)
-![Ekran görüntüsü 2024-11-28 182415](https://github.com/user-attachments/assets/275f615d-24f2-4871-ad2b-a126b11e2664)
-![Ekran görüntüsü 2024-11-28 182633](https://github.com/user-attachments/assets/f573b66c-f65d-4081-90e8-e22702cf9a93)
-![Ekran görüntüsü 2024-11-28 182708](https://github.com/user-attachments/assets/47e59ce8-afc5-4829-a808-fdd6459b7ccc)
-![Ekran görüntüsü 2024-11-28 182739](https://github.com/user-attachments/assets/8e9af59c-2729-486a-a0c4-44651c4d9c85)
-![Ekran görüntüsü 2024-11-28 182818](https://github.com/user-attachments/assets/f3ead0a1-04ea-4931-8a79-7278d2a88768)
-![Ekran görüntüsü 2024-11-28 183011](https://github.com/user-attachments/assets/e27ff94a-19c6-4af1-a50a-96eb422bf82d)
-![Ekran görüntüsü 2024-11-28 183022](https://github.com/user-attachments/assets/7e362c64-b6a7-4b60-a90a-6fdadfdcd482)
-![Ekran görüntüsü 2024-11-28 183106](https://github.com/user-attachments/assets/221ec7d0-11d7-42c4-ad63-f790381e9287)
-![Ekran görüntüsü 2024-11-28 183113](https://github.com/user-attachments/assets/ab3a70df-1373-4848-bafd-b7a4f20e5d8a)
-![Ekran görüntüsü 2024-11-28 183058](https://github.com/user-attachments/assets/7474d3cc-031b-4395-8f61-b29aa347e863)
-![Ekran görüntüsü 2024-11-28 183121](https://github.com/user-attachments/assets/a022ff32-af02-43f3-8075-a06e8d3e5f81)
-![Ekran görüntüsü 2024-11-28 183221](https://github.com/user-attachments/assets/5b4a84a4-3610-4962-b23e-0d0ab61b810d)
-![Ekran görüntüsü 2024-11-28 184451](https://github.com/user-attachments/assets/8c89691a-4dc4-4eee-918d-22647cffb17d)
+
+![Ekran görüntüsü 2024-11-30 210317](https://github.com/user-attachments/assets/39222e2e-1383-405e-8a8d-d8992097864f)
+![Ekran görüntüsü 2024-11-30 210329](https://github.com/user-attachments/assets/15c8f9f2-8811-430e-b81d-18e999382aa5)
+![Ekran görüntüsü 2024-11-30 210416](https://github.com/user-attachments/assets/d7a79397-48dd-47ce-a42c-2f84be0f4213)
+![Ekran görüntüsü 2024-11-30 210452](https://github.com/user-attachments/assets/406ea71b-2484-459d-81cd-25b8a27a43e7)
+![Ekran görüntüsü 2024-11-30 210531](https://github.com/user-attachments/assets/5734abae-2bef-4846-be49-74ad5a940085)
+![Ekran görüntüsü 2024-11-30 210614](https://github.com/user-attachments/assets/12afa311-2293-4469-8a0f-b1ee3880c2a5)
+![Ekran görüntüsü 2024-11-30 210631](https://github.com/user-attachments/assets/33797842-3721-47b0-9fa8-41e337fda06a)
+![Ekran görüntüsü 2024-11-30 210652](https://github.com/user-attachments/assets/073549fb-c96d-4d3d-9166-8e1915755d58)
+![Ekran görüntüsü 2024-11-30 210659](https://github.com/user-attachments/assets/e6ddf300-52ec-4c94-9422-4fe9d80a8c9b)
+![Ekran görüntüsü 2024-11-30 210734](https://github.com/user-attachments/assets/70062b56-9b87-405d-964a-dd229fd41723)
+![Ekran görüntüsü 2024-11-30 210744](https://github.com/user-attachments/assets/efe48a28-4766-4d36-90c0-81cd2fc1bc2f)
+![Ekran görüntüsü 2024-11-30 210831](https://github.com/user-attachments/assets/25b48c7a-afe5-4e7b-b4a2-228f9544cd50)
+![Ekran görüntüsü 2024-11-30 210859](https://github.com/user-attachments/assets/e78ed6ae-cb0e-4e5a-ac80-f3b5cfdd2c94)
+
 
 
 
