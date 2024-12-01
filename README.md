@@ -33,7 +33,7 @@ Screenshot
 - 🔒 CSRF Protection
 - 📧 Password Reset via Email
 - 🎨 Material-UI Components
-
+- 🌐 English-Turkish Language Support
 ## Tech Stack
 
 ### Frontend
