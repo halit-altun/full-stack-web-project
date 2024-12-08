@@ -66,7 +66,7 @@ Before you begin, ensure you have the following installed:
 
 1. Clone the repository
 bash
-git clone https://github.com/halit-altun/fullstack-web-project.git
+git clone https://github.com/halit-altun/full-stack-web-project.git
 cd amazing-ecommerce
 
 2. Install Backend Dependencies
@@ -138,7 +138,7 @@ The application will be available at `http://localhost:5173`
 
 Halit ALTUN - [@halit-altun](https://github.com/halit-altun)
 
-Project Link: [https://github.com/halit-altun/fullstack-web-project)
+Project Link: [https://github.com/halit-altun/full-stack-web-project)
   
 ## Support
 
