@@ -4643,3 +4643,4 @@
 {"level":"info","message":"Order created successfully","orderId":"674bfd21714eb4a0e53917cd","service":"e-commerce-api","timestamp":"2024-12-01 09:07:29","userId":"674b2dd7171f00a30cc356ce"}
 {"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-12-01 09:07:30","userId":"674b2dd7171f00a30cc356ce"}
 {"level":"info","message":"Authentication successful","path":"/orders","service":"e-commerce-api","timestamp":"2024-12-01 09:07:30","userId":"674b2dd7171f00a30cc356ce"}
+{"level":"info","message":"Server 5000 portunda çalışıyor","service":"e-commerce-api","timestamp":"2024-12-08 18:50:23"}
