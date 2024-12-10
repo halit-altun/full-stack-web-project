@@ -134,6 +134,10 @@ The application will be available at `http://localhost:5173`
 - Protected Routes
 - Input Validation
 
+## 📄 License
+
+This project is [MIT](https://github.com/halit-altun/full-stack-web-project/blob/master/LICENSE) licensed.
+
 ## Contact
 
 Halit ALTUN - [@halit-altun](https://github.com/halit-altun)
